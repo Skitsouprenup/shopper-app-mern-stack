@@ -196,7 +196,7 @@ StripeRouter.post('/webhooks', (req, res) => {
 
     try{
         const sig = req.headers['stripe-signature'];
-        const endpointSecret = 'whsec_2a7f8ceb0daf88404a46557c4e35c314d47b16dc7c87ede55892bb7d6b231357';
+        const endpointSecret = process.env.STRIPE_WEBHOOK_SEC as string;
 
         let event: Stripe.Event | undefined = undefined;
 
