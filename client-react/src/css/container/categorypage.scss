@@ -1,0 +1,40 @@
+.categorypage-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+
+    @media only screen and (max-width: 300px) {
+        margin: 10px;
+    }
+
+    .selection {
+        display: flex;
+        width: 100%;
+        flex-wrap: wrap;
+        row-gap: 10px;
+        column-gap: 15px;
+
+        .components {
+            display: flex;
+            width: 225px;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 20px;
+
+            @media only screen and (max-width: 250px) {
+                width: 100%;
+                column-gap: 10px;
+            }
+
+            .dropdown {
+                background-color: white;
+                border: 1px solid lightgrey;
+                height: 40px;
+
+                @media only screen and (max-width: 250px) {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

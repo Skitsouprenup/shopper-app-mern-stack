@@ -1,0 +1,35 @@
+* {
+    box-sizing: border-box;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    .main-content {
+        padding-left: 15px;
+        padding-right: 15px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+
+        @media only screen and (max-width: 300px) {
+            padding: 0;
+        }
+    }
+    
+    .announcement-content {
+        background-color: lightblue;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 18px;
+    }
+}

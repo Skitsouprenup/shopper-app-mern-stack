@@ -1,0 +1,22 @@
+@mixin button-general-style {
+    padding: 10px;
+    min-width: 100px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.selection-button {
+    background-color: white;
+    border: 1px solid rgba(128,128,128,0.6);
+    @include button-general-style;
+
+    &:hover {
+        background-color: lavender;
+    }
+}
+
+.selected-button {
+    background-color: lightgrey;
+    border: 1px solid rgba(128,128,128,0.6);
+    @include button-general-style;
+}

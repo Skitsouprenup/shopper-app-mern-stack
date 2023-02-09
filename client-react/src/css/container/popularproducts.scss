@@ -1,0 +1,24 @@
+@mixin mainContainerProps($wrap) {
+    position: relative;
+    display: flex;
+    flex-wrap: $wrap;
+    gap: 5px;
+    width: 100%;
+    overflow-x: scroll;
+    margin: 10px 0;
+}
+
+.popularproducts-container {
+    @include mainContainerProps(nowrap);
+
+    @media only screen and (max-width: 450px) {
+        flex-wrap: wrap;
+    }
+
+    @import '_product-content.scss';
+}
+
+.popularproducts-container-wrap {
+    @include mainContainerProps(wrap);
+    @import '_product-content.scss';
+}

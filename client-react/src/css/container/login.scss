@@ -1,0 +1,81 @@
+.login-container {
+    background-image: linear-gradient(to right, 
+                                    rgba(255, 255, 255, 0.2),
+                                    rgba(128, 128, 128, 0.7)),
+                      url(https://i.ibb.co/KjjYhZk/pexels-cottonbro-studio-5371683.jpg);
+    background-position: 50% 60%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 400px;
+        background-color: rgba(232, 227, 227, 0.75);
+        border: 1px solid lightcyan;
+        row-gap: 10px;
+        padding: 10px 0;
+
+        @media only screen and (max-width: 400px) {
+            width: 100%;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            row-gap: 10px;
+
+            @media only screen and (max-width: 300px) {
+                width: 100%;
+            }
+
+            input {
+                outline: none;
+                width: 300px;
+                height: 50px;
+
+                @media only screen and (max-width: 300px) {
+                    width: 100%;
+                }
+            }
+
+            .links {
+                display: flex;
+                flex-direction: column;
+                row-gap: 5px;
+
+                p {
+                    cursor: pointer;
+                    width: fit-content;
+
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+            }
+
+            button {
+                width: 150px;
+                height: 50px;
+                background-color: rgb(31, 194, 194);
+                border: 1px solid teal;
+
+                &:hover {
+                    background-color: rgb(36, 209, 209);
+                }
+
+                &:disabled {
+                    cursor: not-allowed;
+                    color: gray;
+                }
+            }
+        }
+    }
+}

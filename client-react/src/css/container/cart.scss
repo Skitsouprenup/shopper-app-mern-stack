@@ -1,0 +1,117 @@
+.cart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 10px;
+    margin: 10px 0;
+
+    @media only screen and (max-width: 300px) {
+        padding: 0 10px;
+    }
+
+    .links {
+        display: flex;
+        justify-content: center;
+        column-gap: 10px;
+    }
+
+    @mixin item-general-style {
+        display: flex;
+        column-gap: 10px;
+        row-gap: 10px;
+        align-items: flex-start;
+        justify-content: center;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .items {
+        @include item-general-style;
+        height: 100%;
+
+        @media only screen and (max-width: 450px) {
+            flex-direction: column;
+        }
+
+        .cart-items {
+            @include item-general-style;
+            align-items: stretch;
+            column-gap: 0;
+            flex: 2;
+            
+            @import '_product-item-container.scss';
+        }
+
+        .summary {
+            position: sticky;
+            top: 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            row-gap: 10px;
+            min-width: 400px;
+            border: 1px solid gray;
+            padding: 10px;
+        
+            @media only screen and (max-width: 450px) {
+                min-width: auto;
+                width: 100%;
+            }
+        
+            div {
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+            }
+        }
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        column-gap: 5px;
+
+        @media only screen and (max-width: 400px) {
+            flex-direction: column;
+            align-items: center;
+            row-gap: 10px;
+        }
+
+        button {
+            padding: 10px;
+            width: 200px;
+            min-width: 75px;
+            cursor: pointer;
+
+            @media only screen and (max-width: 400px) {
+                width: 100%;
+            }
+        }
+
+        .cont-shopping-btn {
+            @extend button;
+
+            border: 1px solid gray;
+            background-color: white;
+
+            &:hover {
+                background-color: rgb(252, 252, 177);
+            }
+        }
+
+        .checkout-btn {
+            @extend button;
+
+            border: 1px solid gray;
+            background-color: black;
+            color: white;
+
+            &:hover {
+                background-color: rgb(21, 158, 3);
+                color: black;
+            }
+        }
+
+    }
+}
