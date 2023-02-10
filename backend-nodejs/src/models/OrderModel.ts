@@ -7,8 +7,7 @@ const OrderSchema = new mongoose.Schema<OrderModelType>(
         _id: mongoose.Types.ObjectId,
         userId: { type: String, required: true, index: true },
         products: Array,
-        stripeSessionUrl: { type: String },
-        expiration: { type: Number },
+        stripeSessionId: { type: String },
         status: { type: String, default: 'pending', index: true },
     },
     { timestamps: true }

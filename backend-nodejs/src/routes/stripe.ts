@@ -4,6 +4,8 @@ import mongoose from "mongoose";
 import Stripe from "stripe";
 import OrderModel from "../models/OrderModel.js";
 import ProductModel from "../models/ProductModel.js";
+import { releaseOnHoldStocks } from "../queries/product/releaseOnHoldStocks.js";
+import { updateStocks } from "../queries/product/updateStocks.js";
 import { CartCheckoutType } from "../types/carttypes.js";
 import { ProductInCartNoPriceInCents } from "../types/producttypes.js";
 import { StripeLineItem } from "../types/stripetypes.js";
@@ -28,15 +30,7 @@ StripeRouter.post("/payment", async (req, res) => {
 
             //Remove existing order. A user can only have
             //one pending order.
-            const existingOrder = 
-                    await OrderModel.findOne(
-                        { userId: res.locals.userId, 
-                          status: 'pending' }, 
-                        'stripeSessionUrl');
-            if(existingOrder) {
-                await stripe?.checkout.sessions.expire(existingOrder?.stripeSessionUrl);
-                await existingOrder.remove();
-            }
+            await releaseOnHoldStocks(res, res.locals.userId, 'existing', stripe);
 
             let cartStripeProducts : Array<StripeLineItem> = [];
             let productsOrder : ProductInCartNoPriceInCents = [];
@@ -64,9 +58,7 @@ StripeRouter.post("/payment", async (req, res) => {
             const queriedProducts = 
                 await ProductModel.find({
                     _id: { 
-                        $in: { 
-                            productIds
-                        }
+                        $in: productIds
                     }
                 },'item');
 
@@ -82,6 +74,17 @@ StripeRouter.post("/payment", async (req, res) => {
                 return;
             }
 
+            const updateProducts = 
+                updateStocks(res, productIds, queriedProducts, productsOrder, 'decrease');
+
+            if(updateProducts?.length) {
+                await ProductModel.collection.bulkWrite(updateProducts);
+            }
+            else {
+                if(!res.headersSent) res.sendStatus(400);
+                return;
+            }
+
             /*
             mongodb ObjectId requires a string of 12 bytes or a string
             of 24 hex characters or an integer
@@ -94,71 +97,18 @@ StripeRouter.post("/payment", async (req, res) => {
                 success_url: 'http://localhost:3000',
                 cancel_url: 'http://localhost:3000/404',
                 metadata: {
-                    userId: res.locals.userId,
                     orderId,
                 }
             });
 
-            //Reduce product stock
-            const updateProducts = [];
-            for(let x = 0; x < productIds.length; x++) {
-                if(queriedProducts[x]._id.toString() === productsOrder[x]._id) {
-                    for(let y of queriedProducts[x].item) {
-                        for(let z of productsOrder[x].variations) {
-                            if(y.color === z?.color) {
-                                for(let a of y.size) {
-                                    const quantity = a.quantity - z.quantity;
-
-                                    if(quantity >= 0) {
-                                        const modifiedSize = a;
-                                        modifiedSize.quantity = quantity;
-
-                                        updateProducts.push({
-                                            updateOne: {
-                                                filter: {
-                                                    _id: productsOrder[x]._id
-                                                },
-                                                update: {
-                                                    $set: {
-                                                        item: y
-                                                    }
-                                                },
-                                                upsert: true
-                                            }
-                                        });
-                                    }
-                                    else {
-                                        //Bad Request #3
-                                        /*
-                                            console.error(`${queriedProducts[x].title}
-                                            stock calculation is invalid!`);
-                                        */
-                                        if(!res.headersSent){
-                                            const msg = queriedProducts[x].title +
-                                            ' current stock is insufficient.'
-                                            res.statusMessage = msg
-                                            res.sendStatus(400);
-                                        }
-                                        return;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            await ProductModel.collection.bulkWrite(updateProducts);
-
-            //3 mins
-            const expireTimeLengthMillis = 1000 * 180;
-
+            //1 min order expiration time
+            const expireTimeLengthMillis = 1000 * 60;
             //create new order
             const newOrder = new OrderModel({
-                _id: orderId,
+                _id: new mongoose.Types.ObjectId(orderId),
                 userId: res.locals.userId,
                 products: productsOrder,
-                stripeSessionUrl: session.url,
-                expiration: Date.now() + expireTimeLengthMillis,
+                stripeSessionId: session.id,
             });
             newOrder.isNew = true;
             await newOrder.save();
@@ -166,15 +116,7 @@ StripeRouter.post("/payment", async (req, res) => {
             //delete order if it's still pending after
             //the expiration time
             setTimeout(async () => {
-                const order = 
-                    await OrderModel.findOne(
-                        { _id: orderId, status: 'pending' }, 
-                        'stripeSessionUrl');
-
-                if(order) {
-                    await stripe?.checkout.sessions.expire(order?.stripeSessionUrl);
-                    await order.remove();
-                }
+                await releaseOnHoldStocks(res, res.locals.userId, 'timeout', stripe);
             }, expireTimeLengthMillis);
 
             res.status(200).send(JSON.stringify({
@@ -192,7 +134,7 @@ StripeRouter.post("/payment", async (req, res) => {
     }
 });
 
-StripeRouter.post('/webhooks', (req, res) => {
+StripeRouter.post('/webhooks', async (req, res) => {
 
     try{
         const sig = req.headers['stripe-signature'];
@@ -214,13 +156,64 @@ StripeRouter.post('/webhooks', (req, res) => {
             // Handle the event
             switch (event.type) {
                 case 'checkout.session.completed':
-                const checkoutSessionCompleted = event.data.object;
-                console.log(checkoutSessionCompleted);
-                // Then define and call a function to handle the event checkout.session.completed
+                    const sessionObj = event.data.object as Stripe.Checkout.Session;
+
+                    type metadataType = { orderId: string };
+                    const metadata = sessionObj.metadata as metadataType;
+
+                    let anomaly = false;
+                    if(metadata?.orderId) {
+                        const existingOrder = 
+                            await OrderModel.findOne(
+                                {
+                                    _id : new mongoose.Types.ObjectId(metadata.orderId)
+                                },
+                                'status');
+                        if(existingOrder) {
+                            existingOrder.status = 'completed';
+                            existingOrder.isNew = false;
+                            await existingOrder.save();
+                        } else anomaly = true;
+                    } else {
+                        console.error('orderId is missing! \n' +
+                        'place orderId in the metadata during checkout creation!');
+                        if(!res.headersSent) {
+                            res.sendStatus(400);
+                        }
+                        return;
+                    }
+                    //There is one type of anomaly that can
+                    //happen during checkout: mishandled transaction.
+                    //
+                    //A mishandled transaction can occur if an order
+                    //is deleted however, checkout succeeds. ALthough,
+                    //this is very unlikely to happen. 
+                    //
+                    //One scenario that I think of that this may happen
+                    //is a situation where at the same time, a user 
+                    //clicks the checkout button of cart section of
+                    //our website and the checkout button of stripe
+                    //checkout webpage.
+                    //
+                    //In this case, we set the order status to
+                    //"anomaly" and admin will go to stripe 
+                    //dashboard, check if the received session ID
+                    //matches one of the payment in payment section
+                    //and refund the payment.  
+                    if(anomaly) {
+                        const anomalyOrder = new OrderModel({
+                            stripeSessionId: sessionObj?.id,
+                            status: 'anomaly',
+                        });
+                        anomalyOrder.isNew = true;
+                        await anomalyOrder.save();
+                    }
                 break;
-                //... handle other event types
-                default:
-                console.log(`Unhandled event type ${event.type}`);
+                /*
+                    //... handle other event types
+                    default:
+                    console.log(`Unhandled event type ${event.type}`);
+                */
             }
         }
         res.sendStatus(200);

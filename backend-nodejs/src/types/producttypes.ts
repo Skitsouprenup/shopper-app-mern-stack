@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { CartProductVariations } from "./carttypes.js";
 
 export interface ProductModelType {
+    _id: mongoose.Types.ObjectId,
     title: string,
     desc: string,
     img: ArrayConstructor,

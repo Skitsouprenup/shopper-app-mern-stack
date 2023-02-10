@@ -5,7 +5,6 @@ export interface OrderModelType {
     _id: mongoose.Types.ObjectId,
     userId: string,
     products: Array<ProductInCartNoPriceInCents>,
-    stripeSessionUrl: string,
-    expiration: number,
-    status: 'pending' | 'completed',
+    stripeSessionId: string,
+    status: 'pending' | 'completed' | 'anomaly' | 'refunded',
 }
