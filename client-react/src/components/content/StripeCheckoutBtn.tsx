@@ -4,7 +4,7 @@ import { getUserCredentials } from '../../scripts/crud/users/localstorageop/getu
 import { setUserCredentials } from '../../scripts/crud/users/localstorageop/setusercredentials';
 import { CartCheckoutType } from '../../scripts/types/carttypes';
 
-import { ComputedCartProducts, ProductInCartNoPriceInCents } from '../../scripts/types/producttypes';
+import { ComputedCartProducts, Decimal128Type, ProductInCartNoPriceInCents } from '../../scripts/types/producttypes';
 import { StripeLineItem } from '../../scripts/types/stripetypes';
 import { decimal128ToString } from '../../scripts/utilities';
 
@@ -15,8 +15,11 @@ const StripeCheckoutBtn = ({products} : propstype) => {
     const getCartItems = (): CartCheckoutType => {
         let stripeItems: Array<StripeLineItem> = [];
         let productItems: ProductInCartNoPriceInCents = [];
+        let total: string | undefined = undefined;
 
         products?.forEach((product) => {
+            total = decimal128ToString(product.total);
+
             product.products.forEach((item) => {
                 productItems.push(item);
 
@@ -38,7 +41,11 @@ const StripeCheckoutBtn = ({products} : propstype) => {
             });
         });
 
-        return {lineItems: stripeItems, productsOrder: productItems};
+        return {
+            lineItems: stripeItems, 
+            productsOrder: productItems,
+            total,
+        };
     };
 
     const checkout = async () => {

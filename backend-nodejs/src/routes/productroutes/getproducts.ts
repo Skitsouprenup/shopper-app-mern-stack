@@ -7,6 +7,12 @@ import { productPageProjection, productShorthandProjection } from "../../getprod
 import { productSortOptions } from "../../utilities.js";
 
 export const getProductById = async (req: Request, res: Response) => {
+
+    if(!req.params.id) {
+        console.error('ID is undefined');
+        res.sendStatus(500);
+    }
+
     try{
         const product = await ProductModel.findById(req.params.id, {}, productPageProjection);
         res.status(200).json(product);
@@ -16,6 +22,28 @@ export const getProductById = async (req: Request, res: Response) => {
         res.sendStatus(500);
     }
 };
+
+export const getProductByTitle = async (req: Request, res: Response) => {
+    const titleQuery : string | undefined = req.params.title;
+
+    if(!titleQuery) {
+        console.error('Title is undefined');
+        res.sendStatus(500);
+    }
+
+    try{
+        const product = await 
+            ProductModel.find(
+                { 
+                    title : { $regex: `[.]*${titleQuery}[.]*`}, 
+                }, {}, productPageProjection);
+        res.status(200).json(product);
+    }
+    catch(err) {
+        console.error(err);
+        res.sendStatus(500);
+    }
+}
 
 export const getAllProducts = async (req: Request, res: Response) => {
     try{

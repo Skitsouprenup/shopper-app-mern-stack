@@ -1,9 +1,34 @@
 
+export const getProductByTitle = 
+    async(productTitle: string, signal: AbortSignal) => {
+    let url: string | undefined = process.env.SERVER_DOMAIN;
+    
+    if(url && productTitle) {
+        url += `/api/products/getproducts/title/${productTitle}`;
+
+        const request = new Request(url, {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'default',
+            headers: {
+                'Content-Type':'application/json',
+            },
+        });
+
+        const product = await fetch(request, {signal});
+        return product;
+    }
+    else {
+        console.error("Empty domain and product title!");
+        return undefined;
+    }
+}
+
 export const getProductById = async (productId: string, signal: AbortSignal) => {
     let url: string | undefined = process.env.SERVER_DOMAIN;
     
     if(url && productId) {
-        url += `/api/products/getproducts/${productId}`;
+        url += `/api/products/getproducts/id/${productId}`;
 
         const request = new Request(url, {
             method: 'GET',

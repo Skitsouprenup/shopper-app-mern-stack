@@ -6,11 +6,25 @@ import SliderContent from './SliderContent';
 /*
   Careful re-rendering this component. Re-rendering this
   component may ruin the animation in this component. It's
-  better not to re-render this component if not necessary.
+  better not to re-render(update) this component if not necessary.
 */
 const SliderImpl = () => {
     const[offersLn, setOffersLn] = useState<number>(0);
     const[slideNumber, setSlideNumber] = useState<number>(0);
+    const[initOnce, setInitOnce] = useState<boolean>(false);
+
+    //We need to hide the slides during component mounting
+    //to prevent image flicker. This flicker happens when
+    //the component becomes visible while css engine
+    //is still translating the slides to their initial
+    //designated positions. 25ms delay is enough, I guess.
+    useEffect(() => {
+        const initDelay = setTimeout(() => {
+            setInitOnce(true);
+        }, 25);
+
+        return () => clearTimeout(initDelay);
+    },[]);
 
     useEffect(() => {
         loopSlides(offersLn, true);
@@ -47,12 +61,14 @@ const SliderImpl = () => {
         height: '100%',
         justifyContent: 'space-between',
         alignItems: 'center',
+        opacity: initOnce ? '1' : 0,
     };
 
     const loopSlides = (maxIndex : number, init : boolean = false) => {
         for(let x = 0; x < maxIndex; x++) {
           const elem = document.getElementById(`slide${x}`);
           if(elem !== null){
+
             if(!elem.style.transition && !init)
               elem.style.transition= 'transform 0.5s ease';
             elem.style.transform = `translateX(${moveSlides(x)}%)`;
@@ -117,7 +133,7 @@ const SliderImpl = () => {
     return (
         <div style={containerStyle}>
             <LeftRightButtons />
-            <SliderContent setOffersLn={setOffersLn}/>
+            <SliderContent setOffersLn={setOffersLn} />
         </div>
     );
 };

@@ -15,6 +15,8 @@ import ProductPage from './components/container/ProductPage';
 import Register from './components/container/Register';
 import Login from './components/container/Login';
 import Cart from './components/container/Cart';
+import ProfilePage from './components/container/ProfilePage';
+import SearchPage from './components/content/SearchPage';
 
 const root = ReactDOM.createRoot(document.getElementById("app-root") as HTMLElement);
 
@@ -27,11 +29,13 @@ root.render(
                     <Route index element={<FrontPageContainer />} />
                     <Route path='categorypage/:category' element={<CategoryPage />} />
                     <Route path='productpage/:productId' element={<ProductPage />} />
-                    <Route path='cart' element={<Cart />}/>
+                    <Route path='search' element={<SearchPage />} />
+                    <Route path='cart' element={<Cart />} />
                 </Route>
                 <Route path='register' element={<Register />} />
                 <Route path='login' element={<Login />} />
-                <Route path="*" element={<h1>404 Not Found</h1>}/>
+                <Route path='profile' element={<ProfilePage />} />
+                <Route path="*" element={<h1>404 Not Found</h1>} />
             </Routes>
         </BrowserRouter>
     </Provider>

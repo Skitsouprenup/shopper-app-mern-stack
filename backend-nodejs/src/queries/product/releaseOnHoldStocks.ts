@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import ProductModel from "../../models/ProductModel.js";
-import { ProductInCartNoPriceInCents } from "../../types/producttypes.js";
 import { Response } from 'express';
 import OrderModel from "../../models/OrderModel.js";
 import Stripe from "stripe";
@@ -13,7 +12,6 @@ export const releaseOnHoldStocks =
 async(
         res: Response,
         filterId: string,
-        orderType: 'existing' | 'timeout',
         stripe: Stripe | undefined,
      ) => {
 
@@ -24,24 +22,16 @@ async(
 
     const order = 
         await OrderModel.findOne(
-            orderType === 'existing' ? 
             { 
                 userId: filterId, 
                 status: 'pending' 
-            } :
-            { 
-                _id: filterId, 
-                status: 'pending' 
-            }
-            , 
-            'stripeSessionUrl products');
+            }, 
+            'stripeSessionId products');
 
     if(order) {
         for(let x of order?.products) {
-            for(let y of x) {
-            productIds.push(new mongoose.Types.ObjectId(y._id));
-            productsOrder.push(y);
-            }
+            productIds.push(new mongoose.Types.ObjectId(x._id));
+            productsOrder.push(x);
         }
 
         queriedProducts = 

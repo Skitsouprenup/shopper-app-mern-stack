@@ -6,8 +6,8 @@ interface CssExports {
   'icon-container': string;
   'image': string;
   'image-content': string;
-  'popularproducts-container': string;
-  'popularproducts-container-wrap': string;
+  'minifiedproducts-container': string;
+  'minifiedproducts-container-wrap': string;
   'title': string;
 }
 export const cssExports: CssExports;

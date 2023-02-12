@@ -5,7 +5,7 @@ export const checkUserSession = async (req: Request, res: Response) => {
 
     await handleSession(req, res, "VERIFY");
 
-    if(res.locals.accesstoken && res.locals.username) {
+    if(res.locals?.accesstoken && res.locals?.username) {
         res.set({
             'Content-Type':'application/json',
             'Cache':'no-store',

@@ -86,7 +86,7 @@ export interface ComputedCartProducts {
     totalInCents: Decimal128Type,
 }
 
-export interface CategoryPageProductProjection {
+export interface MinifiedProductProjection {
     _id: string,
     title: string,
     imgPrimary: string,

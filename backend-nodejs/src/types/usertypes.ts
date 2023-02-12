@@ -10,4 +10,5 @@ export interface UserModelType {
     email: string,
     password: string,
     roles: Array<string>,
+    createdAt: string,
 }

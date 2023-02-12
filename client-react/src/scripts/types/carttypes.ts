@@ -1,4 +1,4 @@
-import { CartProductVariations, ProductInCartNoPriceInCents } from "./producttypes";
+import { CartProductVariations, Decimal128Type, ProductInCartNoPriceInCents } from "./producttypes";
 import { StripeLineItem } from "./stripetypes";
 
 export interface VariationCartProductType {
@@ -14,4 +14,5 @@ export interface VariationCartProductType {
 export interface CartCheckoutType {
     lineItems: Array<StripeLineItem>,
     productsOrder: ProductInCartNoPriceInCents,
+    total: string | undefined,
 }

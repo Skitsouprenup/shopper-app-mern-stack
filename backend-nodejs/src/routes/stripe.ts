@@ -30,7 +30,7 @@ StripeRouter.post("/payment", async (req, res) => {
 
             //Remove existing order. A user can only have
             //one pending order.
-            await releaseOnHoldStocks(res, res.locals.userId, 'existing', stripe);
+            await releaseOnHoldStocks(res, res.locals.userId, stripe);
 
             let cartStripeProducts : Array<StripeLineItem> = [];
             let productsOrder : ProductInCartNoPriceInCents = [];
@@ -102,12 +102,14 @@ StripeRouter.post("/payment", async (req, res) => {
             });
 
             //1 min order expiration time
-            const expireTimeLengthMillis = 1000 * 60;
+            const expireTimeLengthMillis = 1000 * 180;
             //create new order
             const newOrder = new OrderModel({
                 _id: new mongoose.Types.ObjectId(orderId),
                 userId: res.locals.userId,
                 products: productsOrder,
+                total: new mongoose.Types.Decimal128
+                        (items.total ? items.total : ''),
                 stripeSessionId: session.id,
             });
             newOrder.isNew = true;
@@ -116,7 +118,7 @@ StripeRouter.post("/payment", async (req, res) => {
             //delete order if it's still pending after
             //the expiration time
             setTimeout(async () => {
-                await releaseOnHoldStocks(res, res.locals.userId, 'timeout', stripe);
+                await releaseOnHoldStocks(res, res.locals.userId, stripe);
             }, expireTimeLengthMillis);
 
             res.status(200).send(JSON.stringify({
@@ -177,10 +179,7 @@ StripeRouter.post('/webhooks', async (req, res) => {
                     } else {
                         console.error('orderId is missing! \n' +
                         'place orderId in the metadata during checkout creation!');
-                        if(!res.headersSent) {
-                            res.sendStatus(400);
-                        }
-                        return;
+                        anomaly = true;
                     }
                     //There is one type of anomaly that can
                     //happen during checkout: mishandled transaction.
@@ -199,7 +198,11 @@ StripeRouter.post('/webhooks', async (req, res) => {
                     //"anomaly" and admin will go to stripe 
                     //dashboard, check if the received session ID
                     //matches one of the payment in payment section
-                    //and refund the payment.  
+                    //and refund the payment.
+                    //
+                    //If orderId in metadata is missing or non-existent,
+                    //That can cause an anomaly. Make sure orderId is
+                    //placed in metadata before creating checkout session.
                     if(anomaly) {
                         const anomalyOrder = new OrderModel({
                             stripeSessionId: sessionObj?.id,

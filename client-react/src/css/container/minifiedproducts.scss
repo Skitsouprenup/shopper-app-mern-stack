@@ -8,7 +8,7 @@
     margin: 10px 0;
 }
 
-.popularproducts-container {
+.minifiedproducts-container {
     @include mainContainerProps(nowrap);
 
     @media only screen and (max-width: 450px) {
@@ -18,7 +18,7 @@
     @import '_product-content.scss';
 }
 
-.popularproducts-container-wrap {
+.minifiedproducts-container-wrap {
     @include mainContainerProps(wrap);
     @import '_product-content.scss';
 }

@@ -50,4 +50,5 @@ export interface CartProductVariations {
 export interface CartCheckoutType {
     lineItems: Array<StripeLineItem>,
     productsOrder: ProductInCartNoPriceInCents,
+    total: string | undefined,
 }

@@ -35,7 +35,7 @@ const Login = () => {
         userDispatch(resetStatus());
         setUserLoading(false);
       }
-    },[isLoggedIn, status])
+    },[isLoggedIn, status]);
 
     type loginMouseEvtType = React.MouseEvent<HTMLButtonElement, MouseEvent>;
     const submitLoginCredentials = (e: loginMouseEvtType) => {

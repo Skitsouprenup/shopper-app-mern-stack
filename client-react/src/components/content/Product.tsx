@@ -2,10 +2,10 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IoIosHeartEmpty, IoIosInformation } from 'react-icons/io';
 
-import popularprodstyle from '../../css/container/popularproducts.scss';
-import { CategoryPageProductProjection } from '../../scripts/types/producttypes';
+import popularprodstyle from '../../css/container/minifiedproducts.scss';
+import { MinifiedProductProjection } from '../../scripts/types/producttypes';
 
-const Product = ({item} : {item: CategoryPageProductProjection}) => {
+const Product = ({item} : {item: MinifiedProductProjection}) => {
   const navigate = useNavigate();
 
   return (

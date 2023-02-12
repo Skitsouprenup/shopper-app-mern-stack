@@ -57,7 +57,7 @@ const Cart = () => {
         );
     },[variationDelete]);
 
-    if(!cartCount.count) {
+    if(!cartCount.count && !products) {
         return(
             <NoProductToDisplay 
                 msg='No items in cart.'/>
@@ -107,7 +107,14 @@ const Cart = () => {
                 </div>
                 <div className={cartstyle['summary']}>
                     <p><b>Summary</b></p>
-                    <div><b>Subtotal: </b>$0</div>
+                    <div><b>Subtotal: </b>
+                        {`$${
+                             products?.length ? 
+                             decimal128ToString(products[0]?.total) : 
+                             "0"
+                            }`
+                        }
+                    </div>
                     <div><b>Shipping Fee: </b>$0</div>
                     <div><b>Discount: </b>$0</div>
                     <div>

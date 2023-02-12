@@ -1,9 +1,11 @@
 import React from 'react';
 
-const NoProductToDisplay = ({msg} : {msg: string}) => {
+const NoProductToDisplay = 
+  ({msg, color = 'gray'} : 
+   {msg: string, color?: string}) => {
   return (
     <div style={{
-        color: 'gray',
+        color,
         fontSize: '3rem',
         display: 'flex',
         justifyContent: 'center',

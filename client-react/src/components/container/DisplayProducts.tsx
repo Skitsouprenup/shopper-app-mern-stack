@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import { CategoryPageProductProjection } from '../../scripts/types/producttypes';
+import { MinifiedProductProjection } from '../../scripts/types/producttypes';
 import { getAllProducts } from '../../scripts/crud/products/getproducts';
 import Product from '../content/Product';
-import popuplarprodstyle from '../../css/container/popularproducts.scss';
+import popularprodstyle from '../../css/container/minifiedproducts.scss';
 import NoProductToDisplay from '../content/NoProductToDisplay';
 
 type propstype = {
@@ -19,7 +19,7 @@ const DisplayProducts = ({wrap = false,
                           showPopular = false} : propstype) => {
   const[loading, setLoading] = useState<Boolean>(true);
   const[queriedProducts, setQueriedProducts] = 
-  useState<Array<CategoryPageProductProjection> | undefined>();
+  useState<Array<MinifiedProductProjection> | undefined>();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -27,7 +27,12 @@ const DisplayProducts = ({wrap = false,
 
     setLoading(true);
     getAllProducts(signal, category, sort, showPopular).
-    then((resp) => resp ? resp.json() : undefined).
+    then((resp) => {
+      if(resp?.status === 200) {
+        return resp.json();
+      }
+      throw new Error(resp?.statusText);
+    }).
     then((data) => {
       setQueriedProducts(data);
       setLoading(false);
@@ -35,17 +40,21 @@ const DisplayProducts = ({wrap = false,
     catch((e) => {
       if(!signal.aborted)
         console.error(e);
+      setLoading(false);
     });
 
     return () => controller.abort();
   },[sort, category, showPopular])
 
-  return (
+  if(loading)
+    return <div>Loading...</div>;
+
+  return(
     <div className={
-      popuplarprodstyle
+      popularprodstyle
         [
-          wrap ? 'popularproducts-container-wrap' : 
-                 'popularproducts-container'
+          wrap ? 'minifiedproducts-container-wrap' : 
+                 'minifiedproducts-container'
         ]
       }>
       {

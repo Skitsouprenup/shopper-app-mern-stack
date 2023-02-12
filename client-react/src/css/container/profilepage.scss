@@ -1,0 +1,62 @@
+.profilepage-container {
+    background-image: linear-gradient(to right, 
+                                    rgba(255, 255, 255, 0.7),
+                                    rgba(128, 128, 128, 0.5)),
+                      url(https://i.ibb.co/6RY8jJS/pexels-andrew-neel-2312369.jpg);
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    height: 100vh;
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        row-gap: 15px;
+        margin: 0 10px;
+
+        .gotohome {
+            position: relative;
+            height: 50px;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            row-gap: 10px;
+            flex-wrap: wrap;
+
+            .item {
+                display: flex;
+                column-gap: 5px;
+                row-gap: 10px;
+                flex-wrap: wrap;
+            }
+        }
+
+        @mixin item-general-style {
+            display: flex;
+            column-gap: 10px;
+            row-gap: 10px;
+            align-items: flex-start;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .order-items-container {
+            @include item-general-style;
+            height: 100%;
+
+            @media only screen and (max-width: 450px) {
+                flex-direction: column;
+            }
+
+            .order-items {
+                @include item-general-style;
+                align-items: stretch;
+                column-gap: 0;
+            }
+        }
+    }
+}

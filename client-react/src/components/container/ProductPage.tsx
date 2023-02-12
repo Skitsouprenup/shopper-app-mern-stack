@@ -131,7 +131,9 @@ const ProductPage = () => {
                     size: selectedSize,
                 }],
             };
+
             addItemToCart(cartProduct, cartDispatch, isLoggedIn);
+            //Reset quantity input
             quantityDispatch(
                 {
                     type: 'setValue', 

@@ -3,7 +3,7 @@ import { ProductModelType } from "../types/producttypes.js";
 
 export const ProductSchema = new mongoose.Schema<ProductModelType>(
     {
-        title: {type: String, required: true, unique: true},
+        title: {type: String, required: true, unique: true, index: true},
         desc: {type: String, required: true},
         img: {type: Array, required: true},
         imgPrimary: {type: String, required: true},

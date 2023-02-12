@@ -69,5 +69,5 @@ export const checkUserSession = (signal: AbortSignal, userDispatch : AppDispatch
                 userDispatch(setFailedStatus());
             }
         });
-    }
+    } else console.error('Domain is missing!');
 };

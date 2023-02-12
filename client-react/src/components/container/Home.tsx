@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Navbar from '../content/Navbar';
 import Announcement from '../content/Announcement';
@@ -8,14 +8,19 @@ import Newsletter from '../content/Newsletter';
 import Footer from './Footer';
 
 import { Outlet } from 'react-router-dom';
+import { SearchItemContext } from '../../scripts/appcontext';
 
 const Home = () => {
+  const[searchItem, setSearchItem] = useState<string>('');
+
   return (
     <main>
       <Announcement />
       <div className={index['main-content']}>
-        <Navbar />
-        <Outlet />
+        <Navbar setSearchItem={setSearchItem}/>
+        <SearchItemContext.Provider value={{searchItem}}>
+          <Outlet />
+        </SearchItemContext.Provider>
       </div>
       <Newsletter />
       <Footer />

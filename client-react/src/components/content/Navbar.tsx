@@ -12,9 +12,13 @@ import { resetStatus } from '../../scripts/redux/slices/userslice';
 import { setCount, setTotalQuantity } from '../../scripts/redux/slices/cartslice';
 import { getLocalStorCart } from '../../scripts/crud/cart/localstorageop/getlocalstorcart';
 
-const Navbar = () => {
+const Navbar = 
+  ({setSearchItem} :
+   {setSearchItem: React.Dispatch<React.SetStateAction<string>>}) => {
+
   const navigate = useNavigate();
   const[userLoading, setUserLoading] = useState<boolean>(true);
+  const[searchValue, setSearchValue] = useState<string>('');
 
   const globalStateDispatch = useAppDispatch();
   const{ status, isLoggedIn } = useAppSelector((state) => state.user);
@@ -57,6 +61,25 @@ const Navbar = () => {
     }
   },[isLoggedIn, status])
 
+  useEffect(() => {
+    let isCancelled = false;
+    let timeOutId : NodeJS.Timeout | undefined = undefined;
+
+    const searchProductTitle = () => {
+      if(!isCancelled)
+        setSearchItem(searchValue.trim());
+    };
+
+    if(searchValue.trim() || searchValue === '') {
+      timeOutId = setTimeout(searchProductTitle, 500);
+    }
+
+    return () => {
+      isCancelled = true;
+      if(timeOutId) clearTimeout(timeOutId);
+    }
+  },[searchValue]);
+
   return (
     <div className={navBarStyle['navbar']}>
         <div className={navBarStyle['logo-buttons-container']}>
@@ -77,8 +100,13 @@ const Navbar = () => {
 
         <div className={navBarStyle['search-container']}>
             <IoIosSearch className={navBarStyle['search-icon']}/>
-            <input type='text' className={navBarStyle['search-input']}
-                   placeholder='Search'/>
+            <input type='text'
+                   value={searchValue}
+                   className={navBarStyle['search-input']}
+                   placeholder='Search Product Title'
+                   onChange={(e) => setSearchValue(e.target.value)}
+                   onFocus={() => navigate('/search')}
+                   onBlur={() => navigate(-1)}/>
         </div>
     </div>
   );

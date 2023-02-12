@@ -20,8 +20,8 @@ stripeInit();
 
 //These middlewares will be evaluated during request
 //from clients
-//app.use(cors(corsOptions(true)));
-app.use(cors());
+app.use(cors(corsOptions(true)));
+//app.use(cors());
 //In stripe webhooks endpoint. We need to parse the body into a buffer.
 //Other parsers below are going to be fallback parsers of this route.
 app.use('/api/stripe/webhooks', express.raw({ type: "application/json" }));

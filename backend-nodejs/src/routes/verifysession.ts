@@ -31,7 +31,7 @@ const handleSession =
         //Verify User
         const user = await UserModel.findOne({
             username: username,
-        }, 'activeRefreshToken username roles');
+        });
 
         if(!user) {
             //console.error("User doesn't Exist!");
@@ -41,6 +41,11 @@ const handleSession =
         else {
             res.locals.userId = user._id;
             res.locals.username = user.username;
+            res.locals.firstname = user.firstname;
+            res.locals.lastname = user.lastname;
+            res.locals.middleInitial = user.middleInitial;
+            res.locals.email = user.email;
+            res.locals.userCreatedAt = new Date(user.createdAt).toLocaleDateString();
         }
 
         //Compare user refresh token to cookie refresh token
