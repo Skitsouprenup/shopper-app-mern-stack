@@ -36,7 +36,7 @@ export const checkUserSession = (signal: AbortSignal, userDispatch : AppDispatch
 
         fetch(request, {signal}).
         then((resp) => {
-            if(resp.status === 200) {
+            if(resp?.status === 200) {
                 return resp.json();
             } else {
                 userDispatch(logoutUserState());

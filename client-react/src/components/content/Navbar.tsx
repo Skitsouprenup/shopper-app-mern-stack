@@ -26,8 +26,10 @@ const Navbar =
   //user credentials authorization
   useEffect(() => {
     const controller = new AbortController;
+    /*
     if(!isLoggedIn)
       checkUserSession(controller.signal, globalStateDispatch);
+    */
 
     return () => controller.abort();
   },[]);
@@ -36,7 +38,7 @@ const Navbar =
   useEffect(() => {
       if(isLoggedIn) {
         const parsedProducts = getLocalStorCart(isLoggedIn);
-      if(parsedProducts.length) {
+      if(parsedProducts?.length) {
         let quantityCount = 0;
         let itemCount = 0;
 
