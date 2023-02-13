@@ -11,6 +11,8 @@ import { fileURLToPath } from "node:url";
 const rootPath = fileURLToPath(import.meta.url);
 const rootDirectory = path.dirname(rootPath);
 
+const env = dotenv.config().parsed;
+
 export const webpackConfig = {
   mode: prod ? 'production' : 'development',
   entry: './src/App.tsx',
@@ -91,10 +93,17 @@ export const webpackConfig = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'index.html',
+      favicon: './src/assets/images/icon.ico',
       inject: 'body'}),
     new MiniCssExtractPlugin(),
     new webpack.DefinePlugin({
-      'process.env': JSON.stringify(dotenv.config().parsed)
+      ...Object.entries(dotenv.config().parsed).
+        reduce((acc, curr) => (
+          {
+            ...acc, 
+            [`process.env.${curr[0]}`]: JSON.stringify(curr[1]) 
+          }
+        ), {}),
     }),
   ],
 }
