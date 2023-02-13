@@ -97,7 +97,7 @@ export const webpackConfig = {
       inject: 'body'}),
     new MiniCssExtractPlugin(),
     new webpack.DefinePlugin({
-      ...Object.entries(dotenv.config().parsed).
+      ...Object.entries(prod ? process.env : dotenv.config().parsed).
         reduce((acc, curr) => (
           {
             ...acc, 
