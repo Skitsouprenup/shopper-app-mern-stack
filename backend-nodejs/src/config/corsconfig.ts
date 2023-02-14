@@ -1,15 +1,8 @@
-const prod = process.env.NODE_ENV === 'production';
-
-const originsDev = [
-    'http://localhost:3000', 
-    'http://localhost:4000',
-];
-
-const allowedOrigins = prod ? 
-    [process.env.FRONT_END_DOMAIN] :
-    originsDev;
-console.log(allowedOrigins);
-export const corsOptions = (includeCredentials : boolean) => {
+export const corsOptions = 
+    (
+        includeCredentials : boolean,
+        allowedOrigins: Array<string>,
+    ) => {
 
     return {
         origin: (origin: unknown, callback : Function) => {

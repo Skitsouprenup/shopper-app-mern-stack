@@ -18,9 +18,20 @@ const port = process.env.PORT || 4000;
 initConnection();
 stripeInit();
 
+const prod = process.env.NODE_ENV === 'production';
+
+const originsDev = [
+    'http://localhost:3000', 
+    'http://localhost:4000',
+];
+
+const originsProd = [
+    process.env.FRONT_END_DOMAIN as string
+];
+
 //These middlewares will be evaluated during request
 //from clients
-app.use(cors(corsOptions(true)));
+app.use(cors(corsOptions(true, prod ? originsProd : originsDev)));
 //app.use(cors());
 //In stripe webhooks endpoint. We need to parse the body into a buffer.
 //Other parsers below are going to be fallback parsers of this route.
