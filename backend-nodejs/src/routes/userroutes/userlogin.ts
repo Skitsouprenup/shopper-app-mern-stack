@@ -49,6 +49,7 @@ export const userLogin = async (req: Request, res: Response) => {
                         httpOnly: true, 
                         maxAge: 24*60*60*1000,
                         sameSite: "lax",
+                        secure: true,
                     }).
             json({
                 username: user?.username,

@@ -71,6 +71,7 @@ const handleSession =
                 res.clearCookie('jwt', {
                     httpOnly: true, 
                     sameSite: "lax",
+                    secure: true,
                 });
                 res.sendStatus(204);
             } 
