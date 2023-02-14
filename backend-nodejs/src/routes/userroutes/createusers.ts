@@ -83,6 +83,7 @@ export const createUsers = async (req: Request, res: Response) => {
                             httpOnly: true, 
                             maxAge: 24*60*60*1000,
                             sameSite: "lax",
+                            secure: true,
                         }).
                 json({credentials: {
                     username: savedUser?.username,

@@ -73,6 +73,9 @@ const handleSession =
                     sameSite: "lax",
                     secure: true,
                 });
+                if(process.env.NODE_ENV === 'production') {
+                    res.set({'Access-Control-Allow-Origin' : process.env.FRONT_END_DOMAIN});
+                }
                 res.sendStatus(204);
             } 
             else res.sendStatus(500);

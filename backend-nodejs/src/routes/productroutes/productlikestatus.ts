@@ -36,6 +36,9 @@ export const likeProduct = async (req: Request, res: Response) => {
                     likeDocument.likeCount = likeDocument.likedUsers.length;
                     likeDocument.isNew = false;
                     const updatedLikeDocument = await likeDocument.save();
+                    if(process.env.NODE_ENV === 'production') {
+                        res.set({'Access-Control-Allow-Origin' : process.env.FRONT_END_DOMAIN});
+                    }
                     res.status(200).json(
                         {
                             username,
@@ -52,6 +55,9 @@ export const likeProduct = async (req: Request, res: Response) => {
                     likeDocument.likeCount = likeDocument.likedUsers.length;
                     likeDocument.isNew = false;
                     const updatedLikeDocument = await likeDocument.save();
+                    if(process.env.NODE_ENV === 'production') {
+                        res.set({'Access-Control-Allow-Origin' : process.env.FRONT_END_DOMAIN});
+                    }
                     res.status(200).json(
                         {
                             username,
@@ -74,6 +80,9 @@ export const likeProduct = async (req: Request, res: Response) => {
                 });
                 newLikeDocument.isNew = true;
                 const savedLikeDocument = await newLikeDocument.save();
+                if(process.env.NODE_ENV === 'production') {
+                    res.set({'Access-Control-Allow-Origin' : process.env.FRONT_END_DOMAIN});
+                }
                 res.status(200).json(
                     {
                         username,
@@ -126,6 +135,9 @@ export const verifyLike = async (req: Request, res: Response) => {
                         break;
                     }
                 }
+                if(process.env.NODE_ENV === 'production') {
+                    res.set({'Access-Control-Allow-Origin' : process.env.FRONT_END_DOMAIN});
+                }
                 res.status(200).json(
                     {
                         verifiedUsername,
@@ -135,6 +147,9 @@ export const verifyLike = async (req: Request, res: Response) => {
                     }
                 );
             } else {
+                if(process.env.NODE_ENV === 'production') {
+                    res.set({'Access-Control-Allow-Origin' : process.env.FRONT_END_DOMAIN});
+                }
                 res.status(200).json({
                         verifiedUsername,
                         verifiedAccessToken,
