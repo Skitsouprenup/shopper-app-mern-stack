@@ -54,7 +54,7 @@ async (signal: AbortSignal, category?: string, sort?: string, showPopular?: bool
     let url: string | undefined = process.env.SERVER_DOMAIN;
 
     if(url) {
-        url += '/api/products/getallproducts';
+        url += 'api/products/getallproducts';
 
         if(category)
             url += `?category=${category}`;
