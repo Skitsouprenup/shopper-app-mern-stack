@@ -74,7 +74,6 @@ const Cart = () => {
                         products[0]?.products?.length : "0"})`
                     }
                 </p>
-                <p>Wishlist(0)</p>
             </div>
             <div className={cartstyle['items']}>
                 <div className={cartstyle['cart-items']}>

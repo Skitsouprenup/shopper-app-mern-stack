@@ -27,8 +27,7 @@ app.use(cors(corsOptions(true)));
 app.use('/api/stripe/webhooks', express.raw({ type: "application/json" }));
 
 app.use(express.json({type: 'application/json'}),
-        express.text(), 
-        express.urlencoded({ extended: true }));
+        express.text({type: 'text/plain'}));
 app.use(cookieParser());
 app.use('/api/users', UserRouter);
 app.use('/api/admin', AdminRouter);

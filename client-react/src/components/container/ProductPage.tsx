@@ -13,6 +13,7 @@ import { CartProductType } from '../../scripts/types/cartslicetypes';
 import { addItemToCart } from '../../scripts/crud/cart/additemtocart';
 import { useAppDispatch, useAppSelector } from '../../scripts/redux/hooks';
 import { likeProduct, verifyLike } from '../../scripts/crud/products/likeproduct';
+import { setUserCredentials } from '../../scripts/crud/users/localstorageop/setusercredentials';
 
 const ProductPage = () => {
     const[product, setProduct] = useState<ProductType>();
@@ -58,7 +59,7 @@ const ProductPage = () => {
         const signal = controller.signal;
 
         const likeStatus = 
-            verifyLike(signal, productId as string);
+            verifyLike(signal, productId as string, true);
 
         if(likeStatus) {
             likeStatus.
@@ -69,10 +70,13 @@ const ProductPage = () => {
             }).
             then((data) => {
                 if(data) {
+                    if(data?.username && data?.accesstoken) {
+                        setUserCredentials(data.username, data.accesstoken);
+                    }
                     const receivedStatus: boolean = data?.isLiked as boolean;
                     const likes: number = data?.likeCount as number;
                     setIsLiked(receivedStatus);
-                    setLikeCount(likes)
+                    setLikeCount(likes);
                 }
             }).
             catch((e) => {
@@ -91,7 +95,7 @@ const ProductPage = () => {
 
     const setLikeProduct = () => {
         if(!likeLoading) setLikeLoading(true);
-        const likeStatus = likeProduct(productId as string, isLoggedIn);
+        const likeStatus = likeProduct(productId as string, isLoggedIn, true);
 
         if(likeStatus) {
             likeStatus.
@@ -102,8 +106,9 @@ const ProductPage = () => {
             }).
             then((data) => {
                 if(data) {
-                    const receivedStatus: boolean = data.isLiked as boolean;
+                    const receivedStatus: boolean = data?.isLiked as boolean;
                     const likes: number = data?.likeCount as number;
+                    setUserCredentials(data?.username, data?.accesstoken);
                     setIsLiked(receivedStatus);
                     setLikeCount(likes);
                 }

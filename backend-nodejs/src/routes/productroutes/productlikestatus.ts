@@ -6,11 +6,15 @@ export const likeProduct = async (req: Request, res: Response) => {
     await handleSession(req, res, "VERIFY");
 
     try{
+        const username: string = res.locals?.username.toString();
+        const accesstoken: string = res.locals?.accesstoken.toString();
+
         const productId: string = req.query?.productId as string;
         const userId: string = res.locals?.userId?.toString();
+        const likecount: string = req.query?.likecount as string;
 
 
-        if(productId && userId) {
+        if(productId && userId && username && accesstoken && likecount) {
             const likeDocument = await LikeModel.findOne({
                 'product.$id': productId
             }, 'likedUsers likeCount');
@@ -34,8 +38,10 @@ export const likeProduct = async (req: Request, res: Response) => {
                     const updatedLikeDocument = await likeDocument.save();
                     res.status(200).json(
                         {
+                            username,
+                            accesstoken,
                             isLiked: false, 
-                            likeCount: updatedLikeDocument.likeCount,
+                            likeCount: likecount && updatedLikeDocument.likeCount,
                         }
                     );
                 }
@@ -48,8 +54,10 @@ export const likeProduct = async (req: Request, res: Response) => {
                     const updatedLikeDocument = await likeDocument.save();
                     res.status(200).json(
                         {
+                            username,
+                            accesstoken,
                             isLiked: true,
-                            likeCount: updatedLikeDocument.likeCount,
+                            likeCount: likecount && updatedLikeDocument.likeCount,
                         }
                     );
                 }
@@ -62,14 +70,16 @@ export const likeProduct = async (req: Request, res: Response) => {
                         $id: productId,
                     },
                     likedUsers: [userId],
-                    likeCount: 1,
+                    likeCount: likecount && 1,
                 });
                 newLikeDocument.isNew = true;
                 const savedLikeDocument = await newLikeDocument.save();
                 res.status(200).json(
                     {
+                        username,
+                        accesstoken,
                         isLiked: true,
-                        likeCount: savedLikeDocument.likeCount,
+                        likeCount: likecount && savedLikeDocument.likeCount,
                     }
                 );
             }
@@ -86,13 +96,23 @@ export const likeProduct = async (req: Request, res: Response) => {
 };
 
 export const verifyLike = async (req: Request, res: Response) => {
-    await handleSession(req, res, "VERIFY");
+    let verifiedUsername: string = '';
+    let verifiedAccessToken: string = '';
+
+    if(req.query?.username && req.query?.accesstoken) {
+        await handleSession(req, res, "VERIFY");
+        verifiedUsername = 
+            res.locals?.username ? res.locals.username as string : '';
+        verifiedAccessToken = 
+            res.locals?.accesstoken ? res.locals?.accesstoken as string : '';
+    }    
 
     try{
         const productId: string = req.query?.productId as string;
         const userId: string = res.locals?.userId?.toString();
+        const likecount: string = req.query?.likecount as string;
 
-        if(productId && userId) {
+        if(productId && likecount) {
             const product = await LikeModel.findOne({
                 'product.$id': productId
             }, 'likedUsers likeCount');
@@ -108,16 +128,20 @@ export const verifyLike = async (req: Request, res: Response) => {
                 }
                 res.status(200).json(
                     {
+                        verifiedUsername,
+                        verifiedAccessToken,
                         isLiked,
-                        likeCount: product.likeCount
+                        likeCount: likecount ? product.likeCount : 0,
                     }
                 );
             } else {
                 res.status(200).json({
-                    isLiked,
-                    likeCount: 0,
-                }
-            );
+                        verifiedUsername,
+                        verifiedAccessToken,
+                        isLiked,
+                        likeCount: 0,
+                    }
+                );
             }
         }else {
             if(!res.headersSent) 

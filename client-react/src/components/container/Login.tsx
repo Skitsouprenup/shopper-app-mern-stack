@@ -8,11 +8,13 @@ import { useAppDispatch, useAppSelector } from '../../scripts/redux/hooks';
 import { AppDispatch } from '../../scripts/redux/reduxstore';
 import { resetErrorState, resetStatus } from '../../scripts/redux/slices/userslice';
 import GotoHome from '../content/GotoHome';
+import ForgotPass from '../content/modals/ForgotPass';
 
 const Login = () => {
     const navigate = useNavigate();
     const[username, setUsername] = useState<string>('');
     const[password, setPassword] = useState<string>('');
+    const[forgotPassModal, setForgotPassModal] = useState<boolean>(false);
     const[userLoading, setUserLoading] = useState<boolean>(true);
     const userDispatch = useAppDispatch();
     const{ fetchingUser, errorState, status, isLoggedIn } = 
@@ -62,51 +64,64 @@ const Login = () => {
     if(userLoading) return <div>Loading...</div>;
 
     return (
-      <div className={loginstyle['login-container']}>
-        <GotoHome />
-        <div className={loginstyle['content']}>
-          <h2>Login</h2>
-            <form className={loginstyle['form']}>
-              <input 
-                type='text' 
-                placeholder='Username'
-                value={username}
-                onChange={(e) => {
-                  setUsername(e.target.value);
-                }}/>
-              <input 
-                type='password' 
-                placeholder='Password'
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value)
-                }}/>
-              <button 
-                type='button'
-                onClick={submitLoginCredentials}
-                disabled={fetchingUser}>
-                Login
-              </button>
-              {
-                errorState && 
-                <LoginFailedMsg 
-                  loginError={errorState}
-                  userDispatch={userDispatch}/>
-              }
-              <div className={loginstyle['links']}>
-                <p role='button'
-                   aria-roledescription='Forgot password'>
-                    Forgot Password?
-                </p>
-                <p role='button'
-                   aria-roledescription='Create new account'
-                   onClick={() => navigate('/register')}>
-                    Create New Account
-                </p>
+      <>
+        {
+          forgotPassModal && 
+          <ForgotPass 
+            forgotPassModal={forgotPassModal}
+            setForgotPassModal={setForgotPassModal}/>
+        }
+        <div className={loginstyle['login-container']}>
+          <GotoHome />
+          {
+            !forgotPassModal && (
+              <div className={loginstyle['content']}>
+                <h2>Login</h2>
+                  <form className={loginstyle['form']}>
+                    <input 
+                      type='text' 
+                      placeholder='Username'
+                      value={username}
+                      onChange={(e) => {
+                        setUsername(e.target.value);
+                      }}/>
+                    <input 
+                      type='password' 
+                      placeholder='Password'
+                      value={password}
+                      onChange={(e) => {
+                        setPassword(e.target.value)
+                      }}/>
+                    <button 
+                      type='button'
+                      onClick={submitLoginCredentials}
+                      disabled={fetchingUser}>
+                      Login
+                    </button>
+                    {
+                      errorState && 
+                      <LoginFailedMsg 
+                        loginError={errorState}
+                        userDispatch={userDispatch}/>
+                    }
+                    <div className={loginstyle['links']}>
+                      <p role='button'
+                        aria-roledescription='Forgot password'
+                        onClick={() => setForgotPassModal(!forgotPassModal)}>
+                          Forgot Password?
+                      </p>
+                      <p role='button'
+                        aria-roledescription='Create new account'
+                        onClick={() => navigate('/register')}>
+                          Create New Account
+                      </p>
+                    </div>
+                  </form>
               </div>
-            </form>
+            )
+          }
         </div>
-      </div>
+      </>
     );
 };
 

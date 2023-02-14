@@ -158,8 +158,14 @@ StripeRouter.post('/webhooks', async (req, res) => {
             // Handle the event
             switch (event.type) {
                 case 'checkout.session.completed':
+                    /*
+                        I think the right type here is Stripe.Invoice.
+                        For now, I'm gonna test Stripe.Checkout.Session.
+                        event.data.object is too untyped and as the 
+                        time making this app, stripe team still
+                        doesn't put types in event.data.object.
+                     */
                     const sessionObj = event.data.object as Stripe.Checkout.Session;
-
                     type metadataType = { orderId: string };
                     const metadata = sessionObj.metadata as metadataType;
 

@@ -96,6 +96,14 @@ export const webpackConfig = {
       favicon: './src/assets/images/icon.ico',
       inject: 'body'}),
     new MiniCssExtractPlugin(),
+    /*
+      When this app is deployed in netlify, we can't rely on the .env file
+      because it's very likely that we will put it in .gitignore. However,
+      we can add environment variables in netlify.
+
+      In order to access those environment variables, we need to access
+      process.env property.
+    */
     new webpack.DefinePlugin({
       ...Object.entries(prod ? process.env : dotenv.config().parsed).
         reduce((acc, curr) => (

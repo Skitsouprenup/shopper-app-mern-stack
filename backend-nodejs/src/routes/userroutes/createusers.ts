@@ -65,7 +65,7 @@ export const createUsers = async (req: Request, res: Response) => {
             username: fields.username,
             email: fields.email,
             password: CryptoJS.AES.encrypt(fields.password, 
-                    process.env.PASSPHRASE as string),
+                    process.env.PASSPHRASE as string).toString(),
             firstname: fields.firstname,
             lastname: fields.lastname,
             middlename: fields.middlename,

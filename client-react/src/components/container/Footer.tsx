@@ -21,7 +21,6 @@ const Footer = () => {
         <div className={footerstyle['list']}>
           <h2>Payment Methods</h2>
           <div className={footerstyle['list-content']}>
-            <p>Paypal</p>
             <p>Visa</p>
             <p>Mastercard</p>
           </div>

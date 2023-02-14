@@ -35,6 +35,20 @@ export const getProductByTitle = async (req: Request, res: Response) => {
         const product = await 
             ProductModel.find(
                 { 
+                    /*
+                        This regex pattern is good for searching
+                        a keyword in any part of a title. However,
+                        this may impact our app performance.
+
+                        If searching becomes slower, better use
+                        this pattern ^keyword.*
+
+                        The pattern above, matches title starting
+                        from the beginning of the title. This
+                        is not equivalent to the current pattern.
+                        However, this is much faster according
+                        to mongodb docs.
+                    */
                     title : { $regex: `[.]*${titleQuery}[.]*`}, 
                 }, {}, productPageProjection);
         res.status(200).json(product);
