@@ -4,7 +4,7 @@ export const getProductByTitle =
     let url: string | undefined = process.env.SERVER_DOMAIN;
     
     if(url && productTitle) {
-        url += `api/products/getproducts/title/${productTitle}`;
+        url += `/api/products/getproducts/title/${productTitle}`;
 
         const request = new Request(url, {
             method: 'GET',
@@ -28,7 +28,7 @@ export const getProductById = async (productId: string, signal: AbortSignal) => 
     let url: string | undefined = process.env.SERVER_DOMAIN;
     
     if(url && productId) {
-        url += `api/products/getproducts/id/${productId}`;
+        url += `/api/products/getproducts/id/${productId}`;
 
         const request = new Request(url, {
             method: 'GET',
@@ -54,7 +54,7 @@ async (signal: AbortSignal, category?: string, sort?: string, showPopular?: bool
     let url: string | undefined = process.env.SERVER_DOMAIN;
 
     if(url) {
-        url += 'api/products/getallproducts';
+        url += '/api/products/getallproducts';
 
         if(category)
             url += `?category=${category}`;
