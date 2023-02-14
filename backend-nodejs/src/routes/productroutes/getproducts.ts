@@ -116,6 +116,9 @@ export const getAllProducts = async (req: Request, res: Response) => {
             ]) as popularProductsType;
             const output = popularProducts.map((item) => item.products[0]);
             //console.log(util.inspect(output, false, null, true));
+            if(process.env.NODE_ENV === 'production') {
+                res.set({'Access-Control-Allow-Origin' : process.env.FRONT_END_DOMAIN});
+            }
             res.status(200).json(output);
         }
         else {
@@ -128,6 +131,9 @@ export const getAllProducts = async (req: Request, res: Response) => {
                     sort(productSortOptions(sort)).
                     limit(typeof count === 'number' ? count : 0);
             //console.log(util.inspect(products, false, null, true));
+            if(process.env.NODE_ENV === 'production') {
+                res.set({'Access-Control-Allow-Origin' : process.env.FRONT_END_DOMAIN});
+            }
             res.status(200).json(products);
         }
     }
