@@ -9,6 +9,7 @@ export const corsOptions =
             if(allowedOrigins.indexOf(origin as string) !== -1){
                 callback(null, true);
             } else {
+                console.log(allowedOrigins);
                 callback(
                     new Error(
                     'Origin ' + origin as string + 
