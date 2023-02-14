@@ -8,6 +8,7 @@ const originsDev = [
 const allowedOrigins = prod ? 
     [process.env.FRONT_END_DOMAIN] :
     originsDev;
+console.log(allowedOrigins);
 export const corsOptions = (includeCredentials : boolean) => {
 
     return {
