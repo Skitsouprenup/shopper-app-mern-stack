@@ -108,6 +108,10 @@ export const verifyLike = async (req: Request, res: Response) => {
     let verifiedUsername: string = '';
     let verifiedAccessToken: string = '';
 
+    if(process.env.NODE_ENV === 'production') {
+        res.set({'Access-Control-Allow-Origin' : process.env.FRONT_END_DOMAIN});
+    }
+
     if(req.query?.username && req.query?.accesstoken) {
         await handleSession(req, res, "VERIFY");
         verifiedUsername = 
@@ -117,9 +121,6 @@ export const verifyLike = async (req: Request, res: Response) => {
     }    
 
     try{
-        if(process.env.NODE_ENV === 'production') {
-            res.set({'Access-Control-Allow-Origin' : process.env.FRONT_END_DOMAIN});
-        }
         const productId: string = req.query?.productId as string;
         const userId: string = res.locals?.userId?.toString();
         const likecount: string = req.query?.likecount as string;
