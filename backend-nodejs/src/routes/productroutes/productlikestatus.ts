@@ -117,6 +117,9 @@ export const verifyLike = async (req: Request, res: Response) => {
     }    
 
     try{
+        if(process.env.NODE_ENV === 'production') {
+            res.set({'Access-Control-Allow-Origin' : process.env.FRONT_END_DOMAIN});
+        }
         const productId: string = req.query?.productId as string;
         const userId: string = res.locals?.userId?.toString();
         const likecount: string = req.query?.likecount as string;
@@ -135,9 +138,6 @@ export const verifyLike = async (req: Request, res: Response) => {
                         break;
                     }
                 }
-                if(process.env.NODE_ENV === 'production') {
-                    res.set({'Access-Control-Allow-Origin' : process.env.FRONT_END_DOMAIN});
-                }
                 res.status(200).json(
                     {
                         verifiedUsername,
@@ -147,9 +147,6 @@ export const verifyLike = async (req: Request, res: Response) => {
                     }
                 );
             } else {
-                if(process.env.NODE_ENV === 'production') {
-                    res.set({'Access-Control-Allow-Origin' : process.env.FRONT_END_DOMAIN});
-                }
                 res.status(200).json({
                         verifiedUsername,
                         verifiedAccessToken,
