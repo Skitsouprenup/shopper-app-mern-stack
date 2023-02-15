@@ -13,7 +13,6 @@ export const likeProduct = async (req: Request, res: Response) => {
         const userId: string = res.locals?.userId?.toString();
         const likecount: string = req.query?.likecount as string;
 
-
         if(productId && userId && username && accesstoken && likecount) {
             const likeDocument = await LikeModel.findOne({
                 'product.$id': productId
@@ -108,9 +107,7 @@ export const verifyLike = async (req: Request, res: Response) => {
     let verifiedUsername: string = '';
     let verifiedAccessToken: string = '';
 
-    if(process.env.NODE_ENV === 'production') {
-        res.set({'Access-Control-Allow-Origin' : process.env.FRONT_END_DOMAIN});
-    }
+    console.log(req.query?.username);
 
     if(req.query?.username && req.query?.accesstoken) {
         await handleSession(req, res, "VERIFY");
@@ -139,6 +136,9 @@ export const verifyLike = async (req: Request, res: Response) => {
                         break;
                     }
                 }
+                if(process.env.NODE_ENV === 'production') {
+                    res.set({'Access-Control-Allow-Origin' : process.env.FRONT_END_DOMAIN});
+                }
                 res.status(200).json(
                     {
                         verifiedUsername,
@@ -148,6 +148,9 @@ export const verifyLike = async (req: Request, res: Response) => {
                     }
                 );
             } else {
+                if(process.env.NODE_ENV === 'production') {
+                    res.set({'Access-Control-Allow-Origin' : process.env.FRONT_END_DOMAIN});
+                }
                 res.status(200).json({
                         verifiedUsername,
                         verifiedAccessToken,
