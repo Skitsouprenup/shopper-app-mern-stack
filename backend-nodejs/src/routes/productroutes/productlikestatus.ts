@@ -121,7 +121,7 @@ export const verifyLike = async (req: Request, res: Response) => {
         const userId: string = res.locals?.userId?.toString();
         const likecount: string = req.query?.likecount as string;
 
-        if(productId && likecount) {
+        if(productId) {
             const product = await LikeModel.findOne({
                 'product.$id': productId
             }, 'likedUsers likeCount');
