@@ -28,11 +28,11 @@ you will see some unused scripts in the back-end codebase.
 You can clone this project and test it for yourself. However, you need to create .env files
 and add these following variables:
 
-## Front-End  
+## Front-end  
 **STRIPE_PUB_KEY** -> Stripe public key. You can get this in your stripe dashboard.  
 **SERVER_DOMAIN** -> Domain where you deploy your back-end codebase.
 
-## Back-End  
+## Back-end  
 **MONGODB_URI** -> If you're using atlas, look at your mongodb dashboard to get this URI.  
 **PASSPHRASE** -> Secret key for AES encryption.  
 **JWT_ACCESS_TKN_SECRET** -> Secret key for JWT access token. This can be any random bytes or generate UUID.   
