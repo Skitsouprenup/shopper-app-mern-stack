@@ -1,5 +1,5 @@
 # shopper-app-mern-stack
-A full stack(MERN) e-commerce website that I created.
+A full stack(MERN) e-commerce website that I created. This website is response and mobile-ready.
 
 This website is deployed in this link: [Shopper App](https://iridescent-gaufre-ffa5d1.netlify.app/)
 
@@ -10,7 +10,7 @@ test this project in development environment.
 functionalities are implemented. Also, the current state of this project is still rough.
 Need to do more polishing. I will keep updating this project until it's fully complete.
 
-Also, This project has an admin dashboard that I'll work on in the future. For this reason,
+This project has an admin dashboard that I'll work on in the future. For this reason,
 you will see some unused scripts in the back-end codebase.
 
 # Technologies Used
