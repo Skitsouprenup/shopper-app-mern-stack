@@ -1,5 +1,5 @@
 # shopper-app-mern-stack
-A full stack(MERN) e-commerce website that I created. This website is response and mobile-ready.
+A full stack(MERN) e-commerce website that I created. This website is responsive and mobile-ready.
 
 This website is deployed in this link: [Shopper App](https://iridescent-gaufre-ffa5d1.netlify.app/)
 
