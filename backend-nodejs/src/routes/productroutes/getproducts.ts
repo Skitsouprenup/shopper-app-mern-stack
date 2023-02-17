@@ -73,27 +73,29 @@ export const getAllProducts = async (req: Request, res: Response) => {
     let userId = '';
     let accesstoken = '';
     const username = req.query?.username as string;
-    if(username) {
-        await handleSession(req, res, 'VERIFY');
-        userId = res.locals?.userId.toString();
-        accesstoken = res.locals?.accesstoken.toString();
-        if(!userId || !accesstoken) {
-            if(!res.headersSent) {
-                res.sendStatus(400);
-                return;
-            }
-        }
-
-        //The default value of res.statusCode
-        //if not explicitly set is 200. If the
-        //status code is not equal to 200 after
-        //handleSession() method, it means that
-        //There's a problem with user verification
-        //process and we can't continue any further.
-        if(res.statusCode !== 200) return;
-    }
 
     try{
+        //Verify logged in user if there's one.
+        if(username) {
+            await handleSession(req, res, 'VERIFY');
+            userId = res.locals?.userId?.toString();
+            accesstoken = res.locals?.accesstoken?.toString();
+            if(!userId || !accesstoken) {
+                if(!res.headersSent) {
+                    res.sendStatus(400);
+                    return;
+                }
+            }
+    
+            //The default value of res.statusCode
+            //if not explicitly set is 200. If the
+            //status code is not equal to 200 after
+            //handleSession() method, it means that
+            //There's a problem with user verification
+            //process and we can't continue any further.
+            if(res.statusCode !== 200) return;
+        }
+
         const sort = req.query?.sort?.toString();
         const count: unknown = req.query?.count ? req.query.count : 5;
         const category = req.query?.category as string;

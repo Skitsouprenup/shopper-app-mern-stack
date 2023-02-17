@@ -17,7 +17,7 @@ const handleSession =
 
         //Verify Cookie
         if(!cookies?.jwt) {
-            //console.error("Cookie for jwt doesn't exist!");
+            console.error("Cookie for jwt doesn't exist!");
             res.status(400).end();
             return;
         }
