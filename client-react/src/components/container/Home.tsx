@@ -9,9 +9,11 @@ import Footer from './Footer';
 
 import { Outlet } from 'react-router-dom';
 import { SearchItemContext } from '../../scripts/appcontext';
+import { useAppSelector } from '../../scripts/redux/hooks';
 
 const Home = () => {
   const[searchItem, setSearchItem] = useState<string>('');
+  const{ isLoggedIn } = useAppSelector((state) => state.user);
 
   return (
     <main>
@@ -22,7 +24,9 @@ const Home = () => {
           <Outlet />
         </SearchItemContext.Provider>
       </div>
-      <Newsletter />
+      {
+        isLoggedIn && <Newsletter />
+      }
       <Footer />
     </main>
   );

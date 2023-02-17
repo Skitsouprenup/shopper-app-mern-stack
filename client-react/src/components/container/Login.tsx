@@ -51,8 +51,13 @@ const Login = () => {
         multiple browsers 
       */
       e.preventDefault();
-      if(!fetchingUser) 
-        loginRequest(userDispatch, {username, password});
+      if(process.env.NODE_ENV !== 'production') {
+        if(!fetchingUser) loginRequest(userDispatch, {username, password});
+      }
+      else {
+        //For now, disable login function during production
+        alert('Login function is disabled in production.');
+      }
     }; 
 
     useEffect(() => {

@@ -13,6 +13,12 @@ export const registerUser = (
     setErrorMsg: React.Dispatch<React.SetStateAction<string>>) => {
     e.preventDefault();
     
+    if(process.env.NODE_ENV === 'production') {
+      //For now, disable register function during production
+      alert('Registration is disabled in production.');
+      return;
+    }
+
     if(!firstname && !lastname && !username && 
        !password && !confirmPass && !email) {
         setError(true);
