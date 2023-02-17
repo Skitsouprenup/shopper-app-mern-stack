@@ -93,6 +93,7 @@ export const webpackConfig = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'index.html',
+      favicon: './src/assets/images/icon.ico',
       inject: 'body'}),
     new MiniCssExtractPlugin(),
     /*
