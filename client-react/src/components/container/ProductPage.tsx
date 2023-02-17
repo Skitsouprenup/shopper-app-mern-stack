@@ -58,8 +58,9 @@ const ProductPage = () => {
         const controller = new AbortController();
         const signal = controller.signal;
 
+        //console.log(isLoggedIn);
         const likeStatus = 
-            verifyLike(signal, productId as string, true);
+            verifyLike(signal, productId as string, isLoggedIn);
 
         if(likeStatus) {
             likeStatus.
@@ -87,7 +88,7 @@ const ProductPage = () => {
         }
 
         return () => controller.abort();
-    },[productId]);
+    },[productId, isLoggedIn]);
 
     useEffect(() => {
         quantityDispatch({type: 'setValue', payload: 0});

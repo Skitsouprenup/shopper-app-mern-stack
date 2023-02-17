@@ -3,53 +3,21 @@ import { useNavigate } from 'react-router-dom';
 import { IoIosHeartEmpty, IoIosHeart } from 'react-icons/io';
 
 import popularprodstyle from '../../css/container/minifiedproducts.scss';
-import { MinifiedProductProjection } from '../../scripts/types/producttypes';
-import { likeProduct, verifyLike } from '../../scripts/crud/products/likeproduct';
+import { MinifiedProduct } from '../../scripts/types/producttypes';
+import { likeProduct } from '../../scripts/crud/products/likeproduct';
 import { setUserCredentials } from '../../scripts/crud/users/localstorageop/setusercredentials';
-import { useAppDispatch, useAppSelector } from '../../scripts/redux/hooks';
-import { loginUserState } from '../../scripts/redux/slices/userslice';
+import { useAppSelector } from '../../scripts/redux/hooks';
 
-const Product = ({item} : {item: MinifiedProductProjection}) => {
-  const[isLiked, setIsLiked] = useState<boolean>(false);
+const Product = ({ item } : { item: MinifiedProduct }) => {
+  const[isLiked, setIsLiked] = useState<boolean | null>(null);
   const[likeLoading, setLikeLoading] = useState<boolean>(false);
 
-  const reduxDispatch = useAppDispatch();
   const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-
-    const likeStatus = 
-        verifyLike(signal, item._id as string, false);
-
-    if(likeStatus) {
-        likeStatus.
-        then((resp) => {
-            if(resp?.status === 200) {
-                return resp.json();
-            } else return undefined;
-        }).
-        then((data) => {
-            if(data) {
-                if(data?.username && data?.accesstoken) {
-                  reduxDispatch(loginUserState());
-                  setUserCredentials(data?.username, data?.accesstoken);
-                  const receivedStatus: boolean = data?.isLiked as boolean;
-                  setIsLiked(receivedStatus);
-                }
-            }
-        }).
-        catch((e) => {
-            if(!signal.aborted) {
-                console.error(e);
-            }
-        });
-    }
-
-    return () => controller.abort();
-  },[item._id]);
+    setIsLiked(item.isLiked);
+  },[item.isLiked]);
 
   const setLikeProduct = () => {
     if(!likeLoading) setLikeLoading(true);

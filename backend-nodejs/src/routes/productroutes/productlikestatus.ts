@@ -103,24 +103,27 @@ export const likeProduct = async (req: Request, res: Response) => {
     }
 };
 
+//For product page
 export const verifyLike = async (req: Request, res: Response) => {
     let verifiedUsername: string = '';
     let verifiedAccessToken: string = '';
+    let userId: string = '';
 
-    console.log(req.query?.username);
-
-    if(req.query?.username && req.query?.accesstoken) {
+    if(req.query?.username) {
         await handleSession(req, res, "VERIFY");
         verifiedUsername = 
             res.locals?.username ? res.locals.username as string : '';
         verifiedAccessToken = 
             res.locals?.accesstoken ? res.locals?.accesstoken as string : '';
+        userId = res.locals?.userId.toString();
+
+        //Something wrong with the user verification process.
+        //Return immediately.
+        if(res.statusCode !== 200) return;
     }    
 
     try{
         const productId: string = req.query?.productId as string;
-        const userId: string = res.locals?.userId?.toString();
-        const likecount: string = req.query?.likecount as string;
 
         if(productId) {
             const product = await LikeModel.findOne({
@@ -129,7 +132,6 @@ export const verifyLike = async (req: Request, res: Response) => {
     
             let isLiked = false;
             if(product) {
-    
                 for(let x of product.likedUsers) {
                     if(x === userId) {
                         isLiked = true;
@@ -144,7 +146,7 @@ export const verifyLike = async (req: Request, res: Response) => {
                         verifiedUsername,
                         verifiedAccessToken,
                         isLiked,
-                        likeCount: likecount ? product.likeCount : 0,
+                        likeCount: product.likeCount,
                     }
                 );
             } else {

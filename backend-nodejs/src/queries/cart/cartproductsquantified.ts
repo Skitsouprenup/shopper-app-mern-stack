@@ -20,7 +20,6 @@ const computePriceQuantified = {
     ],
 };
 
-
 export const mapCartProducts = {
     $map: {
         input: {

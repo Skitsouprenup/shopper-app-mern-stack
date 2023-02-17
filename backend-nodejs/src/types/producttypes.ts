@@ -1,6 +1,19 @@
 import mongoose from "mongoose";
 import { CartProductVariations } from "./carttypes.js";
 
+export interface MinifiedProduct {
+    _id: string,
+    title: string,
+    imgPrimary: string,
+    isLiked: boolean,
+};
+
+export interface MinifiedProductsPayload {
+    products: Array<MinifiedProduct>,
+    username ?: string,
+    accesstoken ?: string,
+}
+
 export interface ProductModelType {
     _id: mongoose.Types.ObjectId,
     title: string,

@@ -41,43 +41,58 @@ export const likeProduct =
     return null;
 };
 
+//for product page
 export const verifyLike = 
     (signal: AbortSignal,
-     productId: string, 
-     likeCount: boolean) => {
-    
+     productId: string,
+     isLoggedIn: boolean) => {
+
     try {
         let url: string | undefined = process.env.SERVER_DOMAIN;
 
         if(url && productId) {
-            const user: {username: string, accesstoken: string} = getUserCredentials();
-
             let queryString = '';
+            let reqHeaders : HeadersInit | null = null;
+            let request : Request | null = null;
+            let user : {username: string, accesstoken: string} | null = null;
+
+            if(isLoggedIn) {
+                user = getUserCredentials();
+            }
 
             if(user) {
-                queryString = '?productId='+productId+'&username='+user?.username+
-                              '&likecount='+likeCount;
+                queryString = '?productId='+productId+'&username='+user?.username;
+                url += '/api/products/verifylike'+queryString;
+
+                reqHeaders = {
+                    'Content-Type':'application/json',
+                    'Authorization':'Bearer ' + user.accesstoken,
+                };
+
+                request = new Request(url, {
+                    method: 'GET',
+                    mode: 'cors',
+                    credentials: 'include',
+                    cache: 'no-store',
+                    headers: reqHeaders,
+                });
             }
             else {
-                queryString = '?productId='+productId+'&likecount='+likeCount;
+                queryString = '?productId='+productId;
+                url += '/api/products/verifylike'+queryString;
+
+                reqHeaders = {
+                    'Content-Type':'application/json',
+                };
+                request = new Request(url, {
+                    method: 'GET',
+                    mode: 'cors',
+                    cache: 'no-store',
+                    headers: reqHeaders,
+                });
             }
-            url += '/api/products/verifylike'+queryString;
 
-            const reqHeaders : HeadersInit = user ? {
-                'Content-Type':'application/json',
-                'Authorization':'Bearer ' + user.accesstoken,
-            } : {
-                'Content-Type':'application/json',
-            }
-
-            const request = new Request(url, {
-                method: 'GET',
-                mode: 'cors',
-                credentials: 'include',
-                cache: 'no-store',
-                headers: reqHeaders,
-            });
-
+            console.log(url);
             return fetch(request, {signal});
         } else console.error(`Can't find username or productId.`);
     }

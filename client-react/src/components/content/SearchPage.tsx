@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { SearchItemContext } from '../../scripts/appcontext';
-import { MinifiedProductProjection } from '../../scripts/types/producttypes';
+import { MinifiedProduct } from '../../scripts/types/producttypes';
 import { getProductByTitle } from '../../scripts/crud/products/getproducts';
 
 import productstyle from '../../css/container/minifiedproducts.scss';
@@ -10,7 +10,7 @@ import NoProductToDisplay from './NoProductToDisplay';
 const SearchPage = () => {
     const[loading, setLoading] = useState<boolean>(true);
     const[queriedProducts, setQueriedProducts] = 
-        useState<Array<MinifiedProductProjection>>();
+        useState<Array<MinifiedProduct>>();
     const searchItemContext = useContext(SearchItemContext);
 
     useEffect(() => {

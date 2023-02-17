@@ -86,9 +86,16 @@ export interface ComputedCartProducts {
     totalInCents: Decimal128Type,
 }
 
-export interface MinifiedProductProjection {
+export interface MinifiedProduct {
     _id: string,
     title: string,
     imgPrimary: string,
+    isLiked: boolean | null,
+}
+
+export interface MinifiedProductsPayload {
+    products: Array<MinifiedProduct>,
+    username ?: string,
+    accesstoken ?: string,
 }
 

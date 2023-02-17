@@ -1,3 +1,4 @@
+import { getUserCredentials } from "../users/localstorageop/getusercredentials";
 
 export const getProductByTitle = 
     async(productTitle: string, signal: AbortSignal) => {
@@ -49,12 +50,21 @@ export const getProductById = async (productId: string, signal: AbortSignal) => 
 };
 
 export const getAllProducts = 
-async (signal: AbortSignal, category?: string, sort?: string, showPopular?: boolean) : 
+async (signal: AbortSignal,
+       isLoggedIn: boolean,
+       category?: string, 
+       sort?: string, 
+       showPopular?: boolean) : 
        Promise<Response | undefined> => {
     let url: string | undefined = process.env.SERVER_DOMAIN;
 
     if(url) {
         url += '/api/products/getallproducts';
+
+        let user: {username: string, accesstoken: string} | undefined = undefined;
+
+        if(isLoggedIn)
+            user = getUserCredentials();
 
         if(category)
             url += `?category=${category}`;
@@ -70,11 +80,31 @@ async (signal: AbortSignal, category?: string, sort?: string, showPopular?: bool
             else url += `?showPopular=true`;
         }
 
+        if(user?.username) {
+            if(category || sort || showPopular)
+                url += '&username='+user.username;
+            else url += '?username='+user.username;
+        }
+        let requestHeaders : HeadersInit | null = null;
+
+        if(user?.accesstoken) {
+            requestHeaders = {
+                'Content-Type':'application/json',
+                'Authorization': 'Bearer ' + user.accesstoken
+            }
+        }
+        else {
+            requestHeaders = {
+                'Content-Type':'application/json'
+            }
+        }
+
         const request = new Request(url, {
             method: 'GET',
             mode: 'cors',
             cache: 'default',
-            credentials: 'omit',
+            credentials: user?.username ? 'include' : 'omit',
+            headers: requestHeaders
         });
 
         const products = await fetch(request, {signal});

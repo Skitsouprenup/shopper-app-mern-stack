@@ -5,6 +5,10 @@ export const checkUserSession = async (req: Request, res: Response) => {
 
     await handleSession(req, res, "VERIFY");
 
+    //Something wrong with user verification process.
+    //Return immediately.
+    if(res.statusCode !== 200) return;
+
     if(res.locals?.accesstoken && res.locals?.username) {
         if(process.env.NODE_ENV === 'production') {
             res.set({

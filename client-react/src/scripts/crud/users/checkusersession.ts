@@ -47,12 +47,12 @@ export const checkUserSession = (signal: AbortSignal, userDispatch : AppDispatch
         then((data) => {
             if(data) {
                 if(data?.username && data?.accesstoken) {
-                    userDispatch(loginUserState());
-                    userDispatch(setSuccessStatus());
                     setUserCredentials(
                         data.username as string, 
                         data.accesstoken as string
                     );
+                    userDispatch(loginUserState());
+                    userDispatch(setSuccessStatus());
                 } else {
                     console.error(
                         `Can't find username and 

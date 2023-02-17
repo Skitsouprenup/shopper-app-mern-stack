@@ -1,6 +1,7 @@
+/// <reference path="../types/jwttypes.d.ts" />
 import { NextFunction, Request, Response } from "express";
 import UserModel from "../models/UserModel.js";
-import jwt from "jsonwebtoken";
+import jwt, { TokenPayload } from "jsonwebtoken";
 import { verifyAccessToken } from "./verifyaccesstoken.js";
 
 type TokenActionTypes = "VERIFY_LOGOUT" | "VERIFY";
@@ -32,9 +33,8 @@ const handleSession =
         const user = await UserModel.findOne({
             username: username,
         });
-
         if(!user) {
-            //console.error("User doesn't Exist!");
+            console.error("User doesn't Exist!");
             res.status(404).end();
             return;
         }
@@ -66,7 +66,7 @@ const handleSession =
             const updatedUser = await user.save();
             
             if(user === updatedUser){
-                //Note: options in clearCookie(other than maxAage) must be equivalent
+                //Note: options in clearCookie(other than maxAge) must be equivalent
                 //to the options in setCookie.
                 res.clearCookie('jwt', {
                     httpOnly: true, 
@@ -85,14 +85,24 @@ const handleSession =
         jwt.verify(
             refreshToken,
             process.env.JWT_REFRESH_TKN_SECRET as string, 
-            (e) => {
+            (e, decoded) => {
                 //invalid/expired refresh token
                 if(e) {
-                    console.error(e);
+                    //console.error(e);
                     removeLoginStatus();
                 }
                 //valid refresh token 
                 else {
+                    const tokenPayload : TokenPayload = decoded as TokenPayload;
+
+                    //Verify if the user ID in refresh token is equal to
+                    //the ID of requesting user. If not, the user is using a
+                    //refresh token that is not designated to the sent username
+                    if(tokenPayload?.id.toString() !== user?._id.toString()) {
+                        removeLoginStatus();
+                        return;
+                    }
+
                     switch(action) {
                         case "VERIFY":
                             verifyAccessToken(user, req, res, next);
@@ -103,7 +113,6 @@ const handleSession =
                             break;
                     }
                 }
-                
             }
         );
 
