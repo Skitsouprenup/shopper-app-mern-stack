@@ -6,7 +6,7 @@ import { setUserCredentials } from '../../scripts/crud/users/localstorageop/setu
 import { useAppDispatch } from '../../scripts/redux/hooks';
 import { CartCheckoutType } from '../../scripts/types/carttypes';
 
-import { ComputedCartProducts, Decimal128Type, ProductInCartNoPriceInCents } from '../../scripts/types/producttypes';
+import { ComputedCartProducts, ProductInCartNoPriceInCents } from '../../scripts/types/producttypes';
 import { StripeLineItem } from '../../scripts/types/stripetypes';
 import { decimal128ToString } from '../../scripts/utilities';
 

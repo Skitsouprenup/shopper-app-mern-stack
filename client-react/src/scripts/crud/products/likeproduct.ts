@@ -92,7 +92,6 @@ export const verifyLike =
                 });
             }
 
-            console.log(url);
             return fetch(request, {signal});
         } else console.error(`Can't find username or productId.`);
     }

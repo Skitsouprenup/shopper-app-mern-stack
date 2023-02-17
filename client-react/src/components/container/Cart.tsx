@@ -57,7 +57,7 @@ const Cart = () => {
         );
     },[variationDelete]);
 
-    if(!cartCount.count && !products) {
+    if(!cartCount.count) {
         return(
             <NoProductToDisplay 
                 msg='No items in cart.'/>
