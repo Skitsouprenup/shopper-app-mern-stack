@@ -1,7 +1,9 @@
 import React from 'react';
 import cartstyle from '../../css/container/cart.scss';
+import { clearCart } from '../../scripts/crud/cart/clearcart';
 import { getUserCredentials } from '../../scripts/crud/users/localstorageop/getusercredentials';
 import { setUserCredentials } from '../../scripts/crud/users/localstorageop/setusercredentials';
+import { useAppDispatch } from '../../scripts/redux/hooks';
 import { CartCheckoutType } from '../../scripts/types/carttypes';
 
 import { ComputedCartProducts, Decimal128Type, ProductInCartNoPriceInCents } from '../../scripts/types/producttypes';
@@ -11,6 +13,7 @@ import { decimal128ToString } from '../../scripts/utilities';
 type propstype = { products: ComputedCartProducts[] | undefined };
 const StripeCheckoutBtn = ({products} : propstype) => {
     const stripeKey = process.env.STRIPE_PUB_KEY;
+    const globalStateDispatch = useAppDispatch();
 
     const getCartItems = (): CartCheckoutType => {
         let stripeItems: Array<StripeLineItem> = [];
@@ -83,6 +86,7 @@ const StripeCheckoutBtn = ({products} : propstype) => {
                             data?.username as string, 
                             data?.accesstoken as string
                         );
+                        clearCart(globalStateDispatch, true);
                         window.location.replace(data?.url);
                     }
                 }).

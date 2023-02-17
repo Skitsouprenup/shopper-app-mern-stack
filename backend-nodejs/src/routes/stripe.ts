@@ -90,12 +90,23 @@ StripeRouter.post("/payment", async (req, res) => {
             of 24 hex characters or an integer
             */
             const orderId = randomBytes(12).toString('hex');
+            
+            const inProduction = process.env.NODE_ENV === "production";
+
+            const successUrl = 
+                inProduction ? 
+                process.env.FROND_END_DOMAIN+'/profile' : 
+                'http://localhost:3000/profile';
+            const cancelUrl = 
+                inProduction ? 
+                process.env.FROND_END_DOMAIN+'/404' : 
+                'http://localhost:3000/404';
             //create checkout session
             const session = await stripe.checkout.sessions.create({
                 line_items: cartStripeProducts,
                 mode: 'payment',
-                success_url: 'http://localhost:3000',
-                cancel_url: 'http://localhost:3000/404',
+                success_url: successUrl as string,
+                cancel_url: cancelUrl as string,
                 metadata: {
                     orderId,
                 }
