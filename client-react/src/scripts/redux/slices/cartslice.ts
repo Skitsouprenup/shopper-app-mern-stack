@@ -6,7 +6,7 @@ const initialState = {
 };
 
 const cartSlice = createSlice({
-    name: 'cartItem',
+    name: 'cart',
     initialState,
     reducers: {
         incrementCount: (state) => {

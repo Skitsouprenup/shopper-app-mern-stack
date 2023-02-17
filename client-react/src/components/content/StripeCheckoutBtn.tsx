@@ -3,7 +3,7 @@ import cartstyle from '../../css/container/cart.scss';
 import { clearCart } from '../../scripts/crud/cart/clearcart';
 import { getUserCredentials } from '../../scripts/crud/users/localstorageop/getusercredentials';
 import { setUserCredentials } from '../../scripts/crud/users/localstorageop/setusercredentials';
-import { useAppDispatch } from '../../scripts/redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../scripts/redux/hooks';
 import { CartCheckoutType } from '../../scripts/types/carttypes';
 
 import { ComputedCartProducts, ProductInCartNoPriceInCents } from '../../scripts/types/producttypes';
@@ -14,6 +14,7 @@ type propstype = { products: ComputedCartProducts[] | undefined };
 const StripeCheckoutBtn = ({products} : propstype) => {
     const stripeKey = process.env.STRIPE_PUB_KEY;
     const globalStateDispatch = useAppDispatch();
+    const{ isLoggedIn } = useAppSelector((state) => state.user);
 
     const getCartItems = (): CartCheckoutType => {
         let stripeItems: Array<StripeLineItem> = [];
@@ -86,7 +87,7 @@ const StripeCheckoutBtn = ({products} : propstype) => {
                             data?.username as string, 
                             data?.accesstoken as string
                         );
-                        clearCart(globalStateDispatch, true);
+                        clearCart(globalStateDispatch, isLoggedIn, true);
                         window.location.replace(data?.url);
                     }
                 }).
@@ -95,7 +96,7 @@ const StripeCheckoutBtn = ({products} : propstype) => {
     };
 
     if(!stripeKey) {
-        console.error("invalid Stripe Key!");
+        console.error("Invalid Stripe Key!");
         return (
             <button className={cartstyle['checkout-btn']}
                     disabled={true}>

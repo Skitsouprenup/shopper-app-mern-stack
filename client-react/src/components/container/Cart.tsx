@@ -137,7 +137,7 @@ const Cart = () => {
                 <button role='button'
                         aria-roledescription='Clear cart'
                         className={cartstyle['cont-shopping-btn']}
-                        onClick={() => clearCart(cartDispatch)}>
+                        onClick={() => clearCart(cartDispatch, isLoggedIn)}>
                     Clear Cart
                 </button>
                 <StripeCheckoutBtn 
