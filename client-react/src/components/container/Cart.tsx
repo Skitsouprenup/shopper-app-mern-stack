@@ -13,8 +13,11 @@ import { removeCartProductVariation } from '../../scripts/crud/cart/removevariat
 import { initCart } from '../../scripts/crud/cart/initcart';
 import NoProductToDisplay from '../content/NoProductToDisplay';
 import { clearCart } from '../../scripts/crud/cart/clearcart';
+import LoadingModal from '../content/modals/LoadingModal';
+import LoadingComponent from '../content/LoadingComponent';
 
 const Cart = () => {
+    const[isLoading, setIsLoading] = useState<boolean>(true);
     const[productDelete, setProductDelete] = useState<string>('');
     const[variationDelete, setVariationDelete] = 
         useState<VariationCartProductType | undefined>(undefined);
@@ -27,9 +30,10 @@ const Cart = () => {
         let controller: AbortController | undefined = undefined;
 
         if(cartCount.count) {
+            setIsLoading(true);
             controller = new AbortController();
             const signal = controller ? controller.signal : undefined;
-            initCart(signal, setProducts, isLoggedIn);
+            initCart(signal, setProducts, isLoggedIn, setIsLoading);
         }
         
         return () => {
@@ -56,6 +60,10 @@ const Cart = () => {
             isLoggedIn,
         );
     },[variationDelete]);
+
+    if(isLoading) {
+        return <LoadingComponent />;
+    }
 
     if(!cartCount.count) {
         return(
@@ -141,7 +149,9 @@ const Cart = () => {
                     Clear Cart
                 </button>
                 <StripeCheckoutBtn 
-                    products={products}/>
+                    products={products}
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading} />
             </div>
         </div>
     );

@@ -112,7 +112,23 @@ StripeRouter.post("/payment", async (req, res) => {
                 }
             });
 
-            //1 min order expiration time
+            /*
+                Creating order is disabled for a moment.
+                The reason this is disabled for the time being
+                is because I need to create a live(not a test) webhook
+                in stripe in order to catch the "session.completed" event.
+                By doing that, I can mark the order as complete. However,
+                I can only create a live webhook in production.
+                
+                Live webhook needs a domain in order to work. I can
+                use the domain provided by render.com however,
+                I need http cookies to verify user before checkout
+                and it doesn't work on free domain provided by
+                render.
+            */
+           
+            /*
+            //3 mins order expiration time
             const expireTimeLengthMillis = 1000 * 180;
             //create new order
             const newOrder = new OrderModel({
@@ -131,6 +147,7 @@ StripeRouter.post("/payment", async (req, res) => {
             setTimeout(async () => {
                 await releaseOnHoldStocks(res, res.locals.userId, stripe);
             }, expireTimeLengthMillis);
+            */
 
             res.status(200).send(JSON.stringify({
                 url: session.url,

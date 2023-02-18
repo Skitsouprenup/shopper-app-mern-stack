@@ -1,33 +1,11 @@
+@import '_modalcontainer.scss';
+
 .forgotpass-container {
-    background-color: rgba(0, 0, 0, 0.7);
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    z-index: 10;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include modal-container;
 }
 
 .forgotpass-content {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    background-color: rgba(211, 211, 211, 0.75);
-    border: 1px solid lightcyan;
-    padding: 10px;
-    width: 400px;
-    justify-content: center;
-    align-items: center;
-    z-index: 20;
-
-    @media only screen and (max-width: 400px) {
-        left: 0;
-        width: 100%;
-        transform: translateY(-50%);
-    }
+    @include modal-content(.7);
 
     .components {
         display: flex;

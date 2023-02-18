@@ -1,0 +1,10 @@
+@import '_modalcontainer.scss';
+
+.loadingmodal-container {
+    @include modal-container;
+}
+
+.loadingmodal-content {
+    @include modal-content(1);
+    flex-wrap: wrap;
+}

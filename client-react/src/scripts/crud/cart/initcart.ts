@@ -6,7 +6,8 @@ export const initCart =
     (signal: AbortSignal | undefined,
      setProducts: React.Dispatch<
         React.SetStateAction<Array<ComputedCartProducts>>>,
-     isLoggedIn: boolean) => {
+     isLoggedIn: boolean,
+     setIsLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
     
     if(signal) {
         computeProducts(signal, isLoggedIn).
@@ -20,10 +21,12 @@ export const initCart =
                 //console.log(data);
                 setProducts(data);
             }
+            setIsLoading(false);
         }).
         catch((e) => {
             if(!signal?.aborted)
                 console.error(e);
+            setIsLoading(false);
         });
     }
 }

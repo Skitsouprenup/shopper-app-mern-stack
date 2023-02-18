@@ -7,6 +7,7 @@ import popularprodstyle from '../../css/container/minifiedproducts.scss';
 import NoProductToDisplay from '../content/NoProductToDisplay';
 import { useAppSelector } from '../../scripts/redux/hooks';
 import { setUserCredentials } from '../../scripts/crud/users/localstorageop/setusercredentials';
+import LoadingComponent from '../content/LoadingComponent';
 
 type propstype = {
   wrap?: boolean,
@@ -53,6 +54,8 @@ const DisplayProducts = ({wrap = false,
         });
     }
     else {
+      setLoading(true);
+
       getAllProducts(signal, isLoggedIn, category, sort, showPopular).
       then((resp) => {
         if(resp?.status === 200) {
@@ -79,8 +82,7 @@ const DisplayProducts = ({wrap = false,
     return () => controller.abort();
   },[sort, category, showPopular, isLoggedIn]);
 
-  if(loading)
-    return <div>Loading...</div>;
+  if(loading) return <LoadingComponent />;
 
   return(
     <div className={

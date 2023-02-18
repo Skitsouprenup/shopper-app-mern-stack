@@ -10,8 +10,13 @@ import { ComputedCartProducts, ProductInCartNoPriceInCents } from '../../scripts
 import { StripeLineItem } from '../../scripts/types/stripetypes';
 import { decimal128ToString } from '../../scripts/utilities';
 
-type propstype = { products: ComputedCartProducts[] | undefined };
-const StripeCheckoutBtn = ({products} : propstype) => {
+type propstype = { 
+    products: ComputedCartProducts[] | undefined,
+    isLoading: boolean,
+    setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+};
+const StripeCheckoutBtn = ({products, isLoading, setIsLoading} : propstype) => {
+
     const stripeKey = process.env.STRIPE_PUB_KEY;
     const globalStateDispatch = useAppDispatch();
     const{ isLoggedIn } = useAppSelector((state) => state.user);
@@ -53,6 +58,7 @@ const StripeCheckoutBtn = ({products} : propstype) => {
     };
 
     const checkout = async () => {
+        setIsLoading(true);
         const url: string | undefined = 
             process.env.SERVER_DOMAIN + '/api/stripe/payment';
 
@@ -90,9 +96,12 @@ const StripeCheckoutBtn = ({products} : propstype) => {
                         clearCart(globalStateDispatch, isLoggedIn, true);
                         window.location.replace(data?.url);
                     }
+                    setIsLoading(false);
                 }).
-                catch((e) => console.error(e));
-            
+                catch((e) => {
+                    setIsLoading(false);
+                    console.error(e);
+                }); 
     };
 
     if(!stripeKey) {
