@@ -17,6 +17,7 @@ import Login from './components/container/Login';
 import Cart from './components/container/Cart';
 import ProfilePage from './components/container/ProfilePage';
 import SearchPage from './components/content/SearchPage';
+import UnsubNewsletter from './components/content/UnsubNewsletter';
 
 const root = ReactDOM.createRoot(document.getElementById("app-root") as HTMLElement);
 
@@ -35,6 +36,8 @@ root.render(
                 <Route path='register' element={<Register />} />
                 <Route path='login' element={<Login />} />
                 <Route path='profile' element={<ProfilePage />} />
+                <Route path='newsletter/unsub/:unsubCode' 
+                       element={<UnsubNewsletter />} />
                 <Route path="*" element={<h1>404 Not Found</h1>} />
             </Routes>
         </BrowserRouter>

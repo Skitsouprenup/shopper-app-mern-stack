@@ -1,4 +1,6 @@
 import { ProductSchema } from "./models/ProductModel.js";
+import nodemailer from 'nodemailer';
+import CryptoJS from "crypto-js";
 
 export const productSortOptions = (sort: string | undefined) => {
     let option = {};
@@ -29,3 +31,14 @@ export const productSortOptions = (sort: string | undefined) => {
 
     return option;
 };
+
+export const sendEmail = () => {
+    return nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.ADMIN_EMAIL,
+          pass: CryptoJS.AES.decrypt(process.env.ADMIN_EMAIL_PASS as string, 
+            process.env.PASSPHRASE as string).toString(CryptoJS.enc.Utf8),
+        }
+    });
+}

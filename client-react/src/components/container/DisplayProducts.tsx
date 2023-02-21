@@ -22,7 +22,7 @@ const DisplayProducts = ({wrap = false,
                           showPopular = false} : propstype) => {
   const[loading, setLoading] = useState<Boolean>(true);
   const[queriedProducts, setQueriedProducts] = 
-  useState<Array<MinifiedProduct> | undefined>();
+  useState<Array<MinifiedProduct> | undefined | null>(undefined);
   const isLoggedIn = useAppSelector((state) => state.user.isLoggedIn);
 
   useEffect(() => {
@@ -49,12 +49,14 @@ const DisplayProducts = ({wrap = false,
           setLoading(false);
         }).
         catch((e) => {
-          if(!signal.aborted) console.error(e);
+          if(!signal.aborted) {
+            console.error(e);
+            setQueriedProducts(null);
+          }
           setLoading(false);
         });
     }
     else {
-      setLoading(true);
 
       getAllProducts(signal, isLoggedIn, category, sort, showPopular).
       then((resp) => {
@@ -73,8 +75,10 @@ const DisplayProducts = ({wrap = false,
         setLoading(false);
       }).
       catch((e) => {
-        if(!signal.aborted)
+        if(!signal.aborted) {
           console.error(e);
+          setQueriedProducts(null);
+        }
         setLoading(false);
       });
     }
@@ -82,7 +86,11 @@ const DisplayProducts = ({wrap = false,
     return () => controller.abort();
   },[sort, category, showPopular, isLoggedIn]);
 
-  if(loading) return <LoadingComponent />;
+  if(loading || queriedProducts === undefined) 
+    return <LoadingComponent />;
+
+  if(!queriedProducts?.length)
+    return <NoProductToDisplay msg='No Products to Display.'/>;
 
   return(
     <div className={
@@ -93,10 +101,8 @@ const DisplayProducts = ({wrap = false,
         ]
       }>
       {
-       queriedProducts?.length ? (
-        queriedProducts.
-        map((item) => <Product item={item} key={item._id}/>)
-       ) : <NoProductToDisplay msg='No Products to Display.'/>
+       queriedProducts.
+       map((item) => <Product item={item} key={item._id}/>)
       }
     </div>
   );

@@ -1,7 +1,7 @@
 import {Request, Response} from 'express';
-import nodemailer from 'nodemailer';
 import UserModel from '../../models/UserModel.js';
 import CryptoJS from "crypto-js";
+import { sendEmail } from '../../utilities.js';
 
 export const retrievePass = async (req: Request, res: Response) => {
 
@@ -15,15 +15,6 @@ export const retrievePass = async (req: Request, res: Response) => {
                 },'email password');
 
             if(user) {
-                const transporter = nodemailer.createTransport({
-                    service: 'gmail',
-                    auth: {
-                      user: process.env.ADMIN_EMAIL,
-                      pass: CryptoJS.AES.decrypt(process.env.ADMIN_EMAIL_PASS as string, 
-                        process.env.PASSPHRASE as string).toString(CryptoJS.enc.Utf8),
-                    }
-                });
-                
                 const emailBody = 
                 "<p>Here's your password: <b>"+
                 CryptoJS.AES.decrypt(user?.password as string, 
@@ -39,7 +30,7 @@ export const retrievePass = async (req: Request, res: Response) => {
                 html: emailBody,
                 };
                   
-                transporter.sendMail(mailOptions, function(error){
+                sendEmail().sendMail(mailOptions, function(error){
                     if (error) {
                         console.error(error);
                         res.status(500).send("Unexpected Error.");

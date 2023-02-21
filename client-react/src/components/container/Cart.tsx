@@ -13,7 +13,6 @@ import { removeCartProductVariation } from '../../scripts/crud/cart/removevariat
 import { initCart } from '../../scripts/crud/cart/initcart';
 import NoProductToDisplay from '../content/NoProductToDisplay';
 import { clearCart } from '../../scripts/crud/cart/clearcart';
-import LoadingModal from '../content/modals/LoadingModal';
 import LoadingComponent from '../content/LoadingComponent';
 
 const Cart = () => {
