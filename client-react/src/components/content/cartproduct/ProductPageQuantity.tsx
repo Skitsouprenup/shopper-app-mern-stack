@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
-import productpagestyle from '../../css/container/productpage.scss'
-import { QuantityActionType, CountState } from '../../scripts/productquantityreducer';
+import productpagestyle from '../../../css/container/productpage.scss'
+import { QuantityActionType, CountState } from '../../../scripts/productquantityreducer';
 
 interface PropsType {
     quantity: CountState,

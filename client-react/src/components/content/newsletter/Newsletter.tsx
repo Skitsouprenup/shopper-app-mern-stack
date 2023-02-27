@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
 import {IoIosSend} from 'react-icons/io';
-import newsletterstyle from '../../css/content/newsletter.scss';
-import DisplayModal from './modals/DisplayModal';
-import LoadingComponent from './LoadingComponent';
-import { verifyEmail } from '../../scripts/utilities';
+import newsletterstyle from '../../../css/content/newsletter.scss';
+import DisplayModal from '../modals/DisplayModal';
+import LoadingComponent from '../LoadingComponent';
+import { verifyEmail } from '../../../scripts/utilities';
 
 const Newsletter = () => {
   const[email, setEmail] = useState<string>('');

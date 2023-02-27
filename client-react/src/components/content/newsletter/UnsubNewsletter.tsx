@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import pagestyle from '../../css/content/unsubnewsletter.scss';
-import CompanyLogo from '../../assets/images/shopper-company-logo.png';
+import pagestyle from '../../../css/content/unsubnewsletter.scss';
+import CompanyLogo from '../../../assets/images/shopper-company-logo.png';
 
 const UnsubNewsletter = () => {
     const[message, setMessage] = useState<string>('');

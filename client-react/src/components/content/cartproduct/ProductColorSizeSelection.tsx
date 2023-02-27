@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 import ProductColorBtn from './ProductColorBtn';
 import ProductSizeSelection from './ProductSizeSelection';
 
-import { itemType } from '../../scripts/types/producttypes';
-import { QuantityActionType } from '../../scripts/productquantityreducer';
+import { itemType } from '../../../scripts/types/producttypes';
+import { QuantityActionType } from '../../../scripts/productquantityreducer';
 
-import productpagestyle from '../../css/container/productpage.scss';
-import { ProductSizeContext } from '../../scripts/appcontext';
+import productpagestyle from '../../../css/container/productpage.scss';
+import { ProductSizeContext } from '../../../scripts/appcontext';
 
 interface propstype {
   item: itemType,

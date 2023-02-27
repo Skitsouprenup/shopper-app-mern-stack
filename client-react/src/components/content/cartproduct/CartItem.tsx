@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { IoCloseCircleSharp } from 'react-icons/io5';
 
-import cartstyle from '../../css/container/cart.scss';
-import { VariationCartProductType } from '../../scripts/types/carttypes';
-import { CartProductVariations, CartProductInfo } from '../../scripts/types/producttypes';
+import cartstyle from '../../../css/container/cart.scss';
+import { VariationCartProductType } from '../../../scripts/types/carttypes';
+import { CartProductVariations, CartProductInfo } from '../../../scripts/types/producttypes';
 import CartItemOtherInfo from './CartItemOtherInfo';
 
 interface PropsType {

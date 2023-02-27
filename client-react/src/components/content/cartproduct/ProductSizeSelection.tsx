@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
 
-import { sizeType } from '../../scripts/types/producttypes';
+import { sizeType } from '../../../scripts/types/producttypes';
 import ProductSizeBtn from './ProductSizeBtn';
 
-import productpagestyle from '../../css/container/productpage.scss';
-import { ProductSizeContext } from '../../scripts/appcontext';
-import { QuantityActionType } from '../../scripts/productquantityreducer';
+import productpagestyle from '../../../css/container/productpage.scss';
+import { ProductSizeContext } from '../../../scripts/appcontext';
+import { QuantityActionType } from '../../../scripts/productquantityreducer';
 
 interface quantityCompProps {
   quantity: number,

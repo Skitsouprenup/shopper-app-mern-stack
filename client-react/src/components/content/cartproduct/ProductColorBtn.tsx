@@ -1,7 +1,6 @@
 import React from 'react';
-import { QuantityActionType } from '../../scripts/productquantityreducer';
 
-import productpagestyle from '../../css/container/productpage.scss';
+import productpagestyle from '../../../css/container/productpage.scss';
 
 interface propstype {
     color: string,

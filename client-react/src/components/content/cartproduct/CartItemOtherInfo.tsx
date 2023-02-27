@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { CartProductVariations } from '../../scripts/types/producttypes';
+import { CartProductVariations } from '../../../scripts/types/producttypes';
 
-import cartstyle from '../../css/container/cart.scss';
-import { decimal128ToString } from '../../scripts/utilities';
-import { VariationCartProductType } from '../../scripts/types/carttypes';
+import cartstyle from '../../../css/container/cart.scss';
+import { decimal128ToString } from '../../../scripts/utilities';
+import { VariationCartProductType } from '../../../scripts/types/carttypes';
 
 interface propstype {
   productId: string | undefined,

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import cartstyle from '../../css/container/cart.scss';
 
-import CartItem from '../content/CartItem';
+import CartItem from '../content/cartproduct/CartItem';
 import { ComputedCartProducts, CartProductInfo } from '../../scripts/types/producttypes';
 import { decimal128ToString } from '../../scripts/utilities';
 import StripeCheckoutBtn from '../content/StripeCheckoutBtn';

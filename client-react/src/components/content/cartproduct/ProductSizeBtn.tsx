@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 
-import productpagestyle from '../../css/container/productpage.scss';
-import { ProductSizeContext } from '../../scripts/appcontext';
-import { QuantityActionType } from '../../scripts/productquantityreducer';
+import productpagestyle from '../../../css/container/productpage.scss';
+import { ProductSizeContext } from '../../../scripts/appcontext';
+import { QuantityActionType } from '../../../scripts/productquantityreducer';
 
 interface propstype {
   sizeName: string,

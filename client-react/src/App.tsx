@@ -17,7 +17,7 @@ import Login from './components/container/Login';
 import Cart from './components/container/Cart';
 import ProfilePage from './components/container/ProfilePage';
 import SearchPage from './components/content/SearchPage';
-import UnsubNewsletter from './components/content/UnsubNewsletter';
+import UnsubNewsletter from './components/content/newsletter/UnsubNewsletter';
 
 const root = ReactDOM.createRoot(document.getElementById("app-root") as HTMLElement);
 

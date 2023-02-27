@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { IoIosSearch } from 'react-icons/io';
 
-import navBarStyle from '../../css/content/navbar.scss';
-import CompanyLogo from '../../assets/images/shopper-company-logo.png';
+import navBarStyle from '../../../css/content/navbar.scss';
+import CompanyLogo from '../../../assets/images/shopper-company-logo.png';
 import { useNavigate } from 'react-router-dom';
-import NavbarNotLoggedInBtns from './navbar/NotLoggedInBtns';
-import NavbarLoggedInBtns from './navbar/LoggedInBtns';
-import { checkUserSession } from '../../scripts/crud/users/checkusersession';
-import { useAppDispatch, useAppSelector } from '../../scripts/redux/hooks';
-import { resetStatus } from '../../scripts/redux/slices/userslice';
-import { setCount, setTotalQuantity } from '../../scripts/redux/slices/cartslice';
-import { getLocalStorCart } from '../../scripts/crud/cart/localstorageop/getlocalstorcart';
+import NavbarNotLoggedInBtns from './NotLoggedInBtns';
+import NavbarLoggedInBtns from './LoggedInBtns';
+import { checkUserSession } from '../../../scripts/crud/users/checkusersession';
+import { useAppDispatch, useAppSelector } from '../../../scripts/redux/hooks';
+import { resetStatus } from '../../../scripts/redux/slices/userslice';
+import { setCount, setTotalQuantity } from '../../../scripts/redux/slices/cartslice';
+import { getLocalStorCart } from '../../../scripts/crud/cart/localstorageop/getlocalstorcart';
 
 const Navbar = 
   ({setSearchItem} :

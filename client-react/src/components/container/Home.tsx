@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
-import Navbar from '../content/Navbar';
+import Navbar from '../content/navbar/Navbar';
 import Announcement from '../content/Announcement';
 
 import index from '../../css/index.scss';
-import Newsletter from '../content/Newsletter';
+import Newsletter from '../content/newsletter/Newsletter';
 import Footer from './Footer';
 
 import { Outlet } from 'react-router-dom';
