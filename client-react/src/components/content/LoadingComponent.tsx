@@ -4,7 +4,7 @@ import { MutatingDots } from 'react-loader-spinner';
 
 const LoadingComponent = () => {
 
-    const componentStyle : React.CSSProperties = {
+    const componentStyle: React.CSSProperties = {
         display: 'flex',
         flexDirection: 'column',
         width: '100%',
@@ -15,7 +15,7 @@ const LoadingComponent = () => {
 
     return (
         <div style={componentStyle}>
-            <MutatingDots 
+            <MutatingDots
                 height="100"
                 width="100"
                 color="#4fa94d"
