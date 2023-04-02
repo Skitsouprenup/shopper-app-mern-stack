@@ -5,6 +5,7 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import dotenv from "dotenv";
 import path from 'path';
 import webpack from 'webpack';
+import TerserPlugin from 'terser-webpack-plugin';
 
 import { fileURLToPath } from "node:url";
 
@@ -34,7 +35,7 @@ export const webpackConfig = {
   },
   module: {
     rules: [
-      
+
       {
         test: /\.(ts|tsx)$/,
         exclude: /node_modules/,
@@ -43,13 +44,13 @@ export const webpackConfig = {
         },
         use: 'ts-loader',
       },
-      
+
       {
         test: /\.s(a|c)ss$/,
         exclude: /node_modules/,
         use: [
 
-          {loader: prod ? MiniCssExtractPlugin.loader : 'style-loader'},
+          { loader: prod ? MiniCssExtractPlugin.loader : 'style-loader' },
 
           {
             loader: 'css-modules-typescript-loader',
@@ -65,7 +66,7 @@ export const webpackConfig = {
             }
           },
 
-          {loader: 'sass-loader'},
+          { loader: 'sass-loader' },
 
         ],
       },
@@ -74,8 +75,8 @@ export const webpackConfig = {
         test: /\.css$/,
         include: path.resolve(rootDirectory, 'node_modules/normalize.css'),
         use: [
-          {loader: prod ? MiniCssExtractPlugin.loader : 'style-loader'},
-          {loader: 'css-loader'},
+          { loader: prod ? MiniCssExtractPlugin.loader : 'style-loader' },
+          { loader: 'css-loader' },
         ]
       },
 
@@ -90,12 +91,14 @@ export const webpackConfig = {
     ]
   },
   devtool: prod ? undefined : 'source-map',
-  plugins: [
+  plugins: prod ? [
     new HtmlWebpackPlugin({
       template: 'index.html',
       favicon: './src/assets/images/icon.ico',
-      inject: 'body'}),
+      inject: 'body'
+    }),
     new MiniCssExtractPlugin(),
+    new webpack.optimize.AggressiveMergingPlugin(),
     /*
       When this app is deployed in netlify, we can't rely on the .env file
       because it's very likely that we will put it in .gitignore. However,
@@ -108,12 +111,32 @@ export const webpackConfig = {
       ...Object.entries(prod ? process.env : dotenv.config().parsed).
         reduce((acc, curr) => (
           {
-            ...acc, 
-            [`process.env.${curr[0]}`]: JSON.stringify(curr[1]) 
+            ...acc,
+            [`process.env.${curr[0]}`]: JSON.stringify(curr[1])
+          }
+        ), {}),
+    }),
+  ] : [
+    new HtmlWebpackPlugin({
+      template: 'index.html',
+      favicon: './src/assets/images/icon.ico',
+      inject: 'body'
+    }),
+    new MiniCssExtractPlugin(),
+    new webpack.DefinePlugin({
+      ...Object.entries(prod ? process.env : dotenv.config().parsed).
+        reduce((acc, curr) => (
+          {
+            ...acc,
+            [`process.env.${curr[0]}`]: JSON.stringify(curr[1])
           }
         ), {}),
     }),
   ],
+  optimization: prod ? {
+    minimize: true,
+    minimizer: [new TerserPlugin()]
+  } : {}
 }
 
 export default webpackConfig;
