@@ -1,4 +1,7 @@
 backend-nodejs/node_modules
 backend-nodejs/.env
+backend-nodejs/yarn.lock
 client-react/node_modules
 client-react/.env
+client-react/yarn-error.log
+client-react/yarn.lock
