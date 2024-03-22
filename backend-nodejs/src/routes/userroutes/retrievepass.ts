@@ -23,7 +23,7 @@ export const retrievePass = async (req: Request, res: Response) => {
                 "<p>If you feel like your password is compromised."+
                 "please go to the site and reset your password.</p>"
 
-                var mailOptions = {
+                const mailOptions = {
                 from: process.env.ADMIN_EMAIL,
                 to: user?.email,
                 subject: 'Shopper Password Retrieval',

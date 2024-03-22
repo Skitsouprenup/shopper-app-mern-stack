@@ -10,7 +10,6 @@ import ProductRouter from './routes/productroutes/productrouter.js';
 import OrderRouter from './routes/orderroutes/orderrouter.js';
 import StripeRouter, { stripeInit } from './routes/stripe.js';
 import { corsOptions } from './config/corsconfig.js';
-import { joinNewsletter } from './routes/newsletterroutes/joinnewsletter.js';
 import NewsletterRouter from './routes/newsletterroutes/newsletterrouter.js';
 
 dotenv.config();
@@ -23,7 +22,7 @@ stripeInit();
 const prod = process.env.NODE_ENV === 'production';
 
 const originsDev = [
-    'http://localhost:3000', 
+    'http://localhost:3000',
     'http://localhost:4000',
 ];
 
