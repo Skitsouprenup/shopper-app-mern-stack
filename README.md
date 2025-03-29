@@ -4,7 +4,7 @@ A full stack(MERN) e-commerce website that I created. This website is responsive
 **Note:** The deployed website has limitations because my backend codebase is hosted in free tier in render. Example of limitations is http cookie. Login and registration are disabled due to http cookies not working on "on.render" domain provided by render. It's better to test this project in development environment.  
 Read more [here](https://render.com/docs/free) to see other limitations.
 
-If you don't have time to test this project, I have a demo video of this project in this [link](https://youtu.be/OG5xESMMZyU)
+If you don't have time to test this project, I have a demo video of this project in this [link](https://youtu.be/myvfDn7ka-A)
 
 **Note:** This project is still WIP(Work In Progress). Although, most of its core
 functionalities are implemented. Also, the current state of this project is still rough.
